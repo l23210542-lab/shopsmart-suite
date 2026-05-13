@@ -27,8 +27,8 @@ function Register() {
   return (
     <div className="mx-auto flex max-w-md flex-col items-center px-4 py-10">
       <Link to="/" className="mb-6 flex items-center gap-2">
-        <div className="flex size-9 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">P</div>
-        <span className="text-xl font-bold">Pi<span className="text-primary">Commerce</span></span>
+        <div className="flex size-9 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">C</div>
+        <span className="text-xl font-bold">Cenít <span className="text-primary">Pi</span></span>
       </Link>
       <form onSubmit={submit} className="w-full rounded-xl border bg-card p-6 shadow-card">
         <h1 className="text-2xl font-bold">Crear cuenta</h1>
@@ -37,7 +37,7 @@ function Register() {
           <div><Label>Email</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} /></div>
           <div><Label>Contraseña (mín. 8)</Label><Input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} /></div>
           <div>
-            <Label>Quiero usar PiCommerce como</Label>
+            <Label>Quiero usar Cenít Pi como</Label>
             <select value={role} onChange={(e) => setRole(e.target.value as Role)} className="mt-1 w-full rounded-md border bg-card px-3 py-2 text-sm">
               <option value="customer">Comprador</option>
               <option value="seller">Vendedor</option>

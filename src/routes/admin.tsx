@@ -44,7 +44,7 @@ function Admin() {
 
       <section>
         <h1 className="mb-1 text-3xl font-bold">Panel administrativo</h1>
-        <p className="mb-6 text-sm text-muted-foreground">Visión general del marketplace PiCommerce.</p>
+        <p className="mb-6 text-sm text-muted-foreground">Visión general del marketplace Cenít Pi.</p>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Stat icon={<Package />} label="Productos" value={products.length.toString()} />

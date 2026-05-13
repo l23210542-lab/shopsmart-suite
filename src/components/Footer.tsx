@@ -10,7 +10,7 @@ export function Footer() {
         <div>
           <h4 className="mb-3 font-bold">Conócenos</h4>
           <ul className="space-y-1.5 text-sm text-nav-foreground/80">
-            <li>Sobre PiCommerce</li><li>Carreras</li><li>Sostenibilidad</li>
+            <li>Sobre Cenít Pi</li><li>Carreras</li><li>Sostenibilidad</li>
           </ul>
         </div>
         <div>
@@ -26,14 +26,14 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="mb-3 font-bold">PiCommerce sobre Pi 4</h4>
+          <h4 className="mb-3 font-bold">Cenít Pi sobre Raspberry Pi 4</h4>
           <p className="text-sm text-nav-foreground/80">
             Marketplace educativo desplegado sobre Raspberry Pi 4. PHP 8 + MariaDB + Apache.
           </p>
         </div>
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-nav-foreground/60">
-        © {new Date().getFullYear()} PiCommerce — Hackathon Edition
+        © {new Date().getFullYear()} Cenít Pi — Hackathon Edition
       </div>
     </footer>
   );
