@@ -1,17 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
-import { zodValidator } from "@tanstack/zod-adapter";
 import { categories, products } from "@/lib/catalog";
 import { ProductCard } from "@/components/ProductCard";
 
-const search = z.object({
+const productSearchSchema = z.object({
   q: z.string().optional(),
   cat: z.string().optional(),
   sort: z.enum(["relevant", "price-asc", "price-desc", "rating"]).optional(),
 });
 
 export const Route = createFileRoute("/products")({
-  validateSearch: zodValidator(search),
+  validateSearch: productSearchSchema,
   component: Products,
 });
 
