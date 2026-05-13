@@ -19,15 +19,15 @@ function Login() {
     e.preventDefault();
     if (!email || pwd.length < 8) return toast.error("Email válido y contraseña ≥ 8 caracteres");
     login(email, role);
-    toast.success("Bienvenido a PiCommerce");
+    toast.success("Bienvenido a Cenít Pi");
     nav({ to: "/" });
   };
 
   return (
     <div className="mx-auto flex max-w-md flex-col items-center px-4 py-10">
       <Link to="/" className="mb-6 flex items-center gap-2">
-        <div className="flex size-9 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">P</div>
-        <span className="text-xl font-bold">Pi<span className="text-primary">Commerce</span></span>
+        <div className="flex size-9 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">C</div>
+        <span className="text-xl font-bold">Cenít <span className="text-primary">Pi</span></span>
       </Link>
       <form onSubmit={submit} className="w-full rounded-xl border bg-card p-6 shadow-card">
         <h1 className="text-2xl font-bold">Iniciar sesión</h1>

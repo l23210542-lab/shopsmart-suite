@@ -29,9 +29,9 @@ export function Header() {
       {/* Main bar */}
       <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-3 py-2 sm:px-4">
         <Link to="/" className="flex shrink-0 items-center gap-2 rounded-md border border-transparent px-2 py-1.5 hover:border-white/40">
-          <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">P</div>
+          <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">C</div>
           <div className="hidden text-lg font-bold tracking-tight sm:block">
-            Pi<span className="text-primary">Commerce</span>
+            Cenít <span className="text-primary">Pi</span>
           </div>
         </Link>
 
@@ -141,7 +141,7 @@ export function Header() {
             </Link>
           ))}
           <Link to="/seller" className="ml-auto whitespace-nowrap rounded px-2 py-1 font-semibold text-primary hover:bg-white/10">
-            Vender en PiCommerce
+            Vender en Cenít Pi
           </Link>
         </div>
       </div>

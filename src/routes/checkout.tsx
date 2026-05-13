@@ -82,7 +82,7 @@ function Checkout() {
           <Button type="submit" className="mt-4 w-full rounded-full bg-primary text-primary-foreground hover:brightness-95">
             Confirmar pedido
           </Button>
-          <p className="mt-2 text-center text-[11px] text-muted-foreground">Al confirmar aceptas los términos de PiCommerce.</p>
+          <p className="mt-2 text-center text-[11px] text-muted-foreground">Al confirmar aceptas los términos de Cenít Pi.</p>
         </aside>
       </form>
     </div>
