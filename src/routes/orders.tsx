@@ -42,7 +42,7 @@ function Orders() {
               </div>
               <div>
                 <div className="text-muted-foreground">Total</div>
-                <div className="font-semibold">S/ {o.total.toFixed(2)}</div>
+                <div className="font-semibold">$ {o.total.toFixed(2)}</div>
               </div>
               <div>
                 <div className="text-muted-foreground">Enviar a</div>

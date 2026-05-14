@@ -56,7 +56,7 @@ function Seller() {
           value={myProducts.length.toString()}
         />
         <Stat icon={<ShoppingBag />} label="├ôrdenes recibidas" value={orders.length.toString()} />
-        <Stat icon={<DollarSign />} label="Ventas totales" value={`S/ ${sales.toFixed(2)}`} />
+        <Stat icon={<DollarSign />} label="Ventas totales" value={`$ ${sales.toFixed(2)}`} />
       </div>
 
       <div className="mt-8 overflow-hidden rounded-xl border bg-card shadow-card">
@@ -93,7 +93,7 @@ function Seller() {
                   <td className="px-4 py-3">
                     {categories.find((c) => c.slug === p.category)?.name}
                   </td>
-                  <td className="px-4 py-3 font-semibold">S/ {p.price.toFixed(2)}</td>
+                  <td className="px-4 py-3 font-semibold">$ {p.price.toFixed(2)}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs ${p.stock < 5 ? "bg-destructive/15 text-destructive" : "bg-success/15 text-success"}`}

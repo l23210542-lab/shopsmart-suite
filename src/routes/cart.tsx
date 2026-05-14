@@ -86,9 +86,9 @@ function Cart() {
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold">
-                      S/ {(p.price * item.quantity).toFixed(2)}
+                      $ {(p.price * item.quantity).toFixed(2)}
                     </div>
-                    <div className="text-xs text-muted-foreground">S/ {p.price.toFixed(2)} c/u</div>
+                    <div className="text-xs text-muted-foreground">$ {p.price.toFixed(2)} c/u</div>
                   </div>
                 </div>
               );
@@ -101,7 +101,7 @@ function Cart() {
 
         <aside className="h-fit rounded-xl border bg-card p-5 shadow-card md:sticky md:top-32">
           <p className="text-sm text-success">Γ£ô Tu pedido califica para env├¡o GRATIS</p>
-          <div className="mt-3 text-2xl font-bold">Total: S/ {subtotal.toFixed(2)}</div>
+          <div className="mt-3 text-2xl font-bold">Total: $ {subtotal.toFixed(2)}</div>
           <Link to="/checkout">
             <Button className="mt-3 w-full rounded-full bg-primary text-primary-foreground hover:brightness-95">
               Proceder al pago

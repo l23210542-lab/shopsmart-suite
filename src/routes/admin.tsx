@@ -64,7 +64,7 @@ function Admin() {
           <Stat icon={<Package />} label="Productos" value={products.length.toString()} />
           <Stat icon={<Tags />} label="Categor├¡as" value={categories.length.toString()} />
           <Stat icon={<ShoppingBag />} label="├ôrdenes" value={orders.length.toString()} />
-          <Stat icon={<Users />} label="Ingresos" value={`S/ ${totalRevenue.toFixed(2)}`} />
+          <Stat icon={<Users />} label="Ingresos" value={`$ ${totalRevenue.toFixed(2)}`} />
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
@@ -82,7 +82,7 @@ function Admin() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold">S/ {o.total.toFixed(2)}</div>
+                      <div className="font-bold">$ {o.total.toFixed(2)}</div>
                       <div className="text-xs text-success uppercase">{o.status}</div>
                     </div>
                   </li>
