@@ -1,5 +1,6 @@
 ﻿import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import JsBarcode from "jsbarcode";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { useAppCatalog } from "@/lib/use-app-catalog";
@@ -7,14 +8,31 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Check, ChevronLeft, ChevronRight, CreditCard, MapPin, Package, ShieldCheck } from "lucide-react";
+import {
+  Banknote,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  CreditCard,
+  MapPin,
+  Package,
+  ShieldCheck,
+  Store,
+  Wallet,
+} from "lucide-react";
 
 export const Route = createFileRoute("/checkout")({ component: Checkout });
 
 type Step = 1 | 2 | 3;
+
+/** URL oficial de PayPal (inicio de sesión / flujo de pago). Sustituye por la URL de tu comercio cuando integres la API. */
+const PAYPAL_WEB_URL = "https://www.paypal.com/signin";
+
+type PaymentMethod = "card" | "paypal" | "cash";
 
 const STEPS: { step: Step; title: string; short: string }[] = [
   { step: 1, title: "Resumen de orden", short: "Resumen" },
@@ -61,12 +79,23 @@ function Checkout() {
   const [city, setCity] = useState("Lima");
   const [reference, setReference] = useState("");
 
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
+  const [cashReference, setCashReference] = useState<string | null>(null);
+
   const [cardNumber, setCardNumber] = useState("4242424242424242");
   const [cardExpiry, setCardExpiry] = useState("12/28");
   const [cardCvv, setCardCvv] = useState("123");
   const [postal, setPostal] = useState("");
 
   const [acceptTerms, setAcceptTerms] = useState(false);
+
+  useEffect(() => {
+    if (paymentMethod === "cash" && cashReference === null) {
+      setCashReference(
+        `SS${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
+      );
+    }
+  }, [paymentMethod, cashReference]);
 
   useEffect(() => {
     if (user?.name && !fullName) setFullName(user.name);
@@ -106,18 +135,20 @@ function Checkout() {
       toast.error("Indica la ciudad.");
       return false;
     }
-    const digits = cardNumber.replace(/\D/g, "");
-    if (digits.length < 15) {
-      toast.error("Revisa el número de tarjeta (demo).");
-      return false;
-    }
-    if (!/^\d{2}\/\d{2}$/.test(cardExpiry.trim())) {
-      toast.error("Vencimiento en formato MM/AA.");
-      return false;
-    }
-    if (cardCvv.replace(/\D/g, "").length < 3) {
-      toast.error("Indica el CVV.");
-      return false;
+    if (paymentMethod === "card") {
+      const digits = cardNumber.replace(/\D/g, "");
+      if (digits.length < 15) {
+        toast.error("Revisa el número de tarjeta.");
+        return false;
+      }
+      if (!/^\d{2}\/\d{2}$/.test(cardExpiry.trim())) {
+        toast.error("Vencimiento en formato MM/AA.");
+        return false;
+      }
+      if (cardCvv.replace(/\D/g, "").length < 3) {
+        toast.error("Indica el CVV.");
+        return false;
+      }
     }
     return true;
   };
@@ -157,7 +188,7 @@ function Checkout() {
       </div>
       <h1 className="mb-2 text-3xl font-bold">Checkout</h1>
       <p className="mb-8 max-w-2xl text-sm text-muted-foreground">
-        Completa los pasos: revisa tu pedido, ingresa datos de envío y pago (simulado), y confirma la compra.
+        Completa los pasos: revisa tu pedido, elige método de pago (tarjeta, PayPal o efectivo en tienda) y confirma la compra. Los cobros reales requieren integración con pasarelas.
       </p>
 
       <StepIndicator current={step} onSelect={(s) => s < step && goStep(s)} />
@@ -285,28 +316,129 @@ function Checkout() {
               </SectionCard>
 
               <SectionCard
-                title="Pago (simulación)"
-                description="Demo: no se procesa un cobro real."
+                title="Método de pago"
+                description="Elige cómo quieres pagar. Tarjeta y efectivo son simulación en esta demo; PayPal abre el sitio oficial para que completes el pago con tu cuenta."
                 icon={<CreditCard className="size-5" />}
               >
-                <div className="space-y-2">
-                  <Label htmlFor="co-card">Número de tarjeta</Label>
-                  <Input id="co-card" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} inputMode="numeric" autoComplete="cc-number" />
-                </div>
-                <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="co-exp">Vencimiento (MM/AA)</Label>
-                    <Input id="co-exp" value={cardExpiry} onChange={(e) => setCardExpiry(e.target.value)} placeholder="12/28" />
+                <RadioGroup
+                  value={paymentMethod}
+                  onValueChange={(v) => setPaymentMethod(v as PaymentMethod)}
+                  className="grid gap-3 sm:grid-cols-3"
+                >
+                  <label
+                    htmlFor="pay-card"
+                    className={cn(
+                      "flex cursor-pointer flex-col gap-2 rounded-lg border p-4 transition-colors",
+                      paymentMethod === "card" ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "hover:bg-muted/40",
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="card" id="pay-card" />
+                      <CreditCard className="size-4 text-muted-foreground" />
+                      <span className="text-sm font-semibold">Tarjeta</span>
+                    </div>
+                    <span className="pl-6 text-xs text-muted-foreground">Crédito o débito</span>
+                  </label>
+                  <label
+                    htmlFor="pay-paypal"
+                    className={cn(
+                      "flex cursor-pointer flex-col gap-2 rounded-lg border p-4 transition-colors",
+                      paymentMethod === "paypal" ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "hover:bg-muted/40",
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="paypal" id="pay-paypal" />
+                      <Wallet className="size-4 text-muted-foreground" />
+                      <span className="text-sm font-semibold">PayPal</span>
+                    </div>
+                    <span className="pl-6 text-xs text-muted-foreground">Cuenta PayPal</span>
+                  </label>
+                  <label
+                    htmlFor="pay-cash"
+                    className={cn(
+                      "flex cursor-pointer flex-col gap-2 rounded-lg border p-4 transition-colors",
+                      paymentMethod === "cash" ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "hover:bg-muted/40",
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="cash" id="pay-cash" />
+                      <Banknote className="size-4 text-muted-foreground" />
+                      <span className="text-sm font-semibold">Efectivo</span>
+                    </div>
+                    <span className="pl-6 text-xs text-muted-foreground">Tiendas de conveniencia</span>
+                  </label>
+                </RadioGroup>
+
+                {paymentMethod === "card" && (
+                  <div className="mt-6 space-y-4 border-t pt-6">
+                    <p className="text-xs text-muted-foreground">Datos de tarjeta solo para demostración; no se envían a ningún procesador.</p>
+                    <div className="space-y-2">
+                      <Label htmlFor="co-card">Número de tarjeta</Label>
+                      <Input
+                        id="co-card"
+                        value={cardNumber}
+                        onChange={(e) => setCardNumber(e.target.value)}
+                        inputMode="numeric"
+                        autoComplete="cc-number"
+                      />
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="co-exp">Vencimiento (MM/AA)</Label>
+                        <Input id="co-exp" value={cardExpiry} onChange={(e) => setCardExpiry(e.target.value)} placeholder="12/28" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="co-cvv">CVV</Label>
+                        <Input id="co-cvv" value={cardCvv} onChange={(e) => setCardCvv(e.target.value)} inputMode="numeric" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="co-postal">Código postal</Label>
+                        <Input id="co-postal" value={postal} onChange={(e) => setPostal(e.target.value)} placeholder="15074" autoComplete="postal-code" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="co-cvv">CVV</Label>
-                    <Input id="co-cvv" value={cardCvv} onChange={(e) => setCardCvv(e.target.value)} inputMode="numeric" />
+                )}
+
+                {paymentMethod === "paypal" && (
+                  <div className="mt-6 space-y-4 border-t pt-6">
+                    <p className="text-sm text-muted-foreground">
+                      Al continuar al siguiente paso se abrirá <strong className="text-foreground">PayPal</strong> en una nueva pestaña para que inicies
+                      sesión y completes el pago con tu cuenta.
+                    </p>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      className="rounded-full"
+                      onClick={() => window.open(PAYPAL_WEB_URL, "_blank", "noopener,noreferrer")}
+                    >
+                      Abrir PayPal ahora
+                    </Button>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="co-postal">Código postal</Label>
-                    <Input id="co-postal" value={postal} onChange={(e) => setPostal(e.target.value)} placeholder="15074" autoComplete="postal-code" />
+                )}
+
+                {paymentMethod === "cash" && cashReference && (
+                  <div className="mt-6 space-y-4 border-t pt-6">
+                    <div className="flex gap-2 rounded-lg border border-emerald-500/25 bg-emerald-500/5 p-4">
+                      <Store className="mt-0.5 size-5 shrink-0 text-emerald-700 dark:text-emerald-400" />
+                      <div className="text-sm">
+                        <p className="font-semibold text-foreground">Paga en efectivo en tienda</p>
+                        <p className="mt-1 text-muted-foreground">
+                          Presenta el código de barras o la referencia en cajas de <strong className="text-foreground">OXXO</strong>,{" "}
+                          <strong className="text-foreground">7-Eleven</strong> u otras tiendas afiliadas. Indica que pagas la referencia mostrada abajo
+                          por un monto de <strong className="text-foreground">${total.toFixed(2)}</strong> (total del pedido, incluye envío si aplica).
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">Código de referencia</p>
+                      <code className="block rounded-md bg-muted px-3 py-2 font-mono text-sm">{cashReference}</code>
+                    </div>
+                    <PaymentBarcode value={cashReference} />
+                    <p className="text-xs text-muted-foreground">
+                      Referencia de demostración; en producción la generaría tu proveedor de pagos en tienda (p. ej. OXXO Pay).
+                    </p>
                   </div>
-                </div>
+                )}
               </SectionCard>
 
               <div className="flex flex-wrap justify-between gap-2">
@@ -318,7 +450,11 @@ function Checkout() {
                   type="button"
                   className="rounded-full bg-primary text-primary-foreground"
                   onClick={() => {
-                    if (validateStep2()) goStep(3);
+                    if (!validateStep2()) return;
+                    if (paymentMethod === "paypal") {
+                      window.open(PAYPAL_WEB_URL, "_blank", "noopener,noreferrer");
+                    }
+                    goStep(3);
                   }}
                 >
                   Revisar y confirmar
@@ -344,10 +480,29 @@ function Checkout() {
                 <Separator />
                 <div>
                   <h3 className="mb-2 font-semibold text-foreground">Pago</h3>
-                  <p className="text-muted-foreground">
-                    Tarjeta terminada en <span className="font-mono font-semibold text-foreground">{cardLast4}</span> · Vence{" "}
-                    <span className="font-mono">{cardExpiry.trim()}</span>
-                  </p>
+                  {paymentMethod === "card" && (
+                    <p className="text-muted-foreground">
+                      Tarjeta de crédito o débito terminada en <span className="font-mono font-semibold text-foreground">{cardLast4}</span> · Vence{" "}
+                      <span className="font-mono">{cardExpiry.trim()}</span>
+                    </p>
+                  )}
+                  {paymentMethod === "paypal" && (
+                    <p className="text-muted-foreground">
+                      <strong className="text-foreground">PayPal</strong> — completa el pago en la pestaña de PayPal si aún no lo hiciste. Esta demo no
+                      verifica el estado del cobro.
+                    </p>
+                  )}
+                  {paymentMethod === "cash" && cashReference && (
+                    <div className="space-y-2 text-muted-foreground">
+                      <p>
+                        <strong className="text-foreground">Efectivo en tienda</strong> (OXXO, 7-Eleven, etc.) con referencia{" "}
+                        <span className="font-mono font-semibold text-foreground">{cashReference}</span>.
+                      </p>
+                      <div className="max-w-sm">
+                        <PaymentBarcode value={cashReference} />
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <Separator />
                 <div>
@@ -372,7 +527,7 @@ function Checkout() {
               <div className="mt-6 flex items-start gap-3 rounded-lg border border-amber-500/30 bg-amber-500/5 p-4">
                 <Checkbox id="co-terms" checked={acceptTerms} onCheckedChange={(v) => setAcceptTerms(v === true)} className="mt-0.5" />
                 <label htmlFor="co-terms" className="cursor-pointer text-sm leading-snug text-muted-foreground">
-                  Acepto los términos y condiciones de Cenít Pi y confirmo que los datos de envío y pago (demo) son correctos.
+                  Acepto los términos y condiciones de Cenít Pi y confirmo que los datos de envío y el método de pago elegido son correctos.
                 </label>
               </div>
 
@@ -430,6 +585,35 @@ function Checkout() {
           )}
         </aside>
       </div>
+    </div>
+  );
+}
+
+function PaymentBarcode({ value }: { value: string }) {
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    const el = svgRef.current;
+    if (!el || !value) return;
+    el.replaceChildren();
+    try {
+      JsBarcode(el, value, {
+        format: "CODE128",
+        width: 2,
+        height: 56,
+        displayValue: true,
+        fontSize: 13,
+        margin: 10,
+        background: "transparent",
+      });
+    } catch {
+      // valor no válido para el formato
+    }
+  }, [value]);
+
+  return (
+    <div className="flex justify-center overflow-x-auto rounded-lg border bg-background p-3">
+      <svg ref={svgRef} className="max-h-[120px] max-w-full" aria-label={`Código de barras de referencia ${value}`} role="img" />
     </div>
   );
 }
