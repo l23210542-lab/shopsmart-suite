@@ -1,6 +1,6 @@
-/**
- * Punto único de exportación del dominio "catálogo".
- * Los datos en runtime vienen del contexto de la ruta raíz (MariaDB o estático).
+﻿/**
+ * Punto ├║nico de exportaci├│n del dominio "cat├ílogo".
+ * Los datos en runtime vienen del contexto de la ruta ra├¡z (MariaDB o est├ítico).
  */
 export type { AppCatalogBundle, Category, Product } from "./catalog-types";
 export { findProductInBundle, productsByCategoryInBundle } from "./catalog-helpers";

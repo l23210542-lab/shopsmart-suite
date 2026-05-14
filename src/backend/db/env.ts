@@ -13,10 +13,20 @@
  *   DB_NAME=cenit_pi
  */
 
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+import { config } from "dotenv";
+
+const envFile = resolve(process.cwd(), ".env");
+if (typeof process !== "undefined" && existsSync(envFile)) {
+  config({ path: envFile });
+}
+
 function readEnv(key: string): string | undefined {
   if (typeof process === "undefined" || !process.env) return undefined;
   const v = process.env[key];
-  return v === "" || v === undefined ? undefined : v;
+  if (v === "" || v === undefined) return undefined;
+  return v.trim().replace(/^\uFEFF/, "");
 }
 
 export interface DatabaseEnv {

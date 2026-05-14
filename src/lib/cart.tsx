@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+﻿import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Product } from "./catalog-types";
 import { findStaticProduct } from "./catalog-static";
 
@@ -34,7 +34,7 @@ export function CartProvider({
   resolveProduct,
 }: {
   children: ReactNode;
-  /** Si se omite, se usan solo los productos del mock estático. */
+  /** Si se omite, se usan solo los productos del mock est├ítico. */
   resolveProduct?: (id: string) => Product | undefined;
 }) {
   const findProduct = resolveProduct ?? findStaticProduct;

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { useAppCatalog } from "@/lib/use-app-catalog";
 import { ProductCard } from "@/components/ProductCard";
@@ -36,7 +36,7 @@ function Products() {
         {/* Sidebar */}
         <aside className="rounded-xl border bg-card p-4 shadow-card md:sticky md:top-32 md:self-start">
           <h3 className="mb-2 text-sm font-bold uppercase tracking-wide text-muted-foreground">
-            Categorías
+            Categor├¡as
           </h3>
           <ul className="space-y-1 text-sm">
             <li>

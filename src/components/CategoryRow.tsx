@@ -22,19 +22,9 @@ export function CategoryRow({
   };
   return (
     <section className="mt-8">
-<<<<<<< Updated upstream
       <div className="mb-3 flex items-end justify-between gap-2 border-b pb-2">
         <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{title}</h2>
         <Link to="/products" search={{ cat: slug, q: undefined } as any} className="text-sm font-medium text-price hover:underline">
-=======
-      <div className="mb-3 flex items-end justify-between border-b pb-2">
-        <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
-        <Link
-          to="/products"
-          search={{ cat: slug, q: undefined } as any}
-          className="text-sm font-medium text-price hover:underline"
-        >
->>>>>>> Stashed changes
           Ver todo →
         </Link>
       </div>

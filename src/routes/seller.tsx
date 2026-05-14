@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/cart";
 import { useAppCatalog } from "@/lib/use-app-catalog";
@@ -25,10 +25,10 @@ function Seller() {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h1 className="text-2xl font-bold">Acceso de vendedor requerido</h1>
-        <p className="mt-2 text-muted-foreground">Inicia sesión como vendedor para ver tu panel.</p>
+        <p className="mt-2 text-muted-foreground">Inicia sesi├│n como vendedor para ver tu panel.</p>
         <Link to="/login">
           <Button className="mt-4 rounded-full bg-primary text-primary-foreground">
-            Iniciar sesión
+            Iniciar sesi├│n
           </Button>
         </Link>
       </div>
@@ -41,7 +41,7 @@ function Seller() {
         <div>
           <h1 className="text-3xl font-bold">Panel del vendedor</h1>
           <p className="text-sm text-muted-foreground">
-            Hola, {user.name}. Aquí puedes gestionar tu catálogo.
+            Hola, {user.name}. Aqu├¡ puedes gestionar tu cat├ílogo.
           </p>
         </div>
         <Button className="rounded-full bg-primary text-primary-foreground">
@@ -55,7 +55,7 @@ function Seller() {
           label="Productos publicados"
           value={myProducts.length.toString()}
         />
-        <Stat icon={<ShoppingBag />} label="Órdenes recibidas" value={orders.length.toString()} />
+        <Stat icon={<ShoppingBag />} label="├ôrdenes recibidas" value={orders.length.toString()} />
         <Stat icon={<DollarSign />} label="Ventas totales" value={`S/ ${sales.toFixed(2)}`} />
       </div>
 
@@ -69,7 +69,7 @@ function Seller() {
             <thead className="bg-muted text-left text-xs uppercase text-muted-foreground">
               <tr>
                 <th className="px-4 py-3">Producto</th>
-                <th className="px-4 py-3">Categoría</th>
+                <th className="px-4 py-3">Categor├¡a</th>
                 <th className="px-4 py-3">Precio</th>
                 <th className="px-4 py-3">Stock</th>
                 <th className="px-4 py-3 text-right">Acciones</th>

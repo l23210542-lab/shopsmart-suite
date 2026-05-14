@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { findProductInBundle } from "@/lib/catalog-helpers";
 import { getProductByIdFromDb } from "@/backend/catalog.server";
 import { Star, Truck, ShieldCheck, RotateCcw, Check } from "lucide-react";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/product/$id")({
     <div className="mx-auto max-w-xl p-12 text-center">
       <h1 className="text-2xl font-bold">Producto no encontrado</h1>
       <Link to="/products" search={{} as any} className="mt-4 inline-block text-price underline">
-        Volver al catálogo
+        Volver al cat├ílogo
       </Link>
     </div>
   ),
@@ -46,7 +46,7 @@ function Detail() {
         <Link to="/" className="hover:underline">
           Inicio
         </Link>{" "}
-        ·{" "}
+        ┬╖{" "}
         <Link
           to="/products"
           search={{ cat: product.category, q: undefined } as any}
@@ -54,7 +54,7 @@ function Detail() {
         >
           {product.category}
         </Link>{" "}
-        · <span className="text-foreground">{product.name}</span>
+        ┬╖ <span className="text-foreground">{product.name}</span>
       </nav>
 
       <div className="grid gap-6 rounded-xl border bg-card p-4 shadow-card md:grid-cols-[1fr_1.2fr_320px] md:p-6">
@@ -80,7 +80,7 @@ function Detail() {
                 />
               ))}
             </div>
-            <span className="text-sm text-price hover:underline">{product.reviews} reseñas</span>
+            <span className="text-sm text-price hover:underline">{product.reviews} rese├▒as</span>
           </div>
           <div className="my-4 border-y py-4">
             <div className="flex items-baseline gap-1">
@@ -88,7 +88,7 @@ function Detail() {
               <span className="text-4xl font-bold">{product.price.toFixed(2)}</span>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Precio incluye IGV. Envío calculado en checkout.
+              Precio incluye IGV. Env├¡o calculado en checkout.
             </p>
           </div>
           <h3 className="mb-2 font-semibold">Sobre este producto</h3>
@@ -107,7 +107,7 @@ function Detail() {
         <aside className="h-fit rounded-lg border bg-background p-4">
           <div className="text-2xl font-bold">S/ {product.price.toFixed(2)}</div>
           <p className="mt-1 flex items-center gap-1 text-sm text-success">
-            <Truck className="size-4" /> Envío GRATIS mañana
+            <Truck className="size-4" /> Env├¡o GRATIS ma├▒ana
           </p>
           <p className="mt-2 text-sm">
             {product.stock > 5
@@ -135,10 +135,10 @@ function Detail() {
               className="w-full rounded-full bg-primary text-primary-foreground hover:brightness-95"
               onClick={() => {
                 add(product.id, qty);
-                toast.success("Añadido al carrito");
+                toast.success("A├▒adido al carrito");
               }}
             >
-              Añadir al carrito
+              A├▒adir al carrito
             </Button>
             <Link to="/cart">
               <Button variant="secondary" className="w-full rounded-full">
@@ -152,7 +152,7 @@ function Detail() {
               <ShieldCheck className="size-3.5" /> Compra protegida
             </p>
             <p className="flex items-center gap-2">
-              <RotateCcw className="size-3.5" /> Devolución gratuita 30 días
+              <RotateCcw className="size-3.5" /> Devoluci├│n gratuita 30 d├¡as
             </p>
           </div>
         </aside>

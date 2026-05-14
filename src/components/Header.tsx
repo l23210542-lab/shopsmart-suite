@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+﻿import { Link, useNavigate } from "@tanstack/react-router";
 import {
   Search,
   ShoppingCart,
@@ -104,11 +104,7 @@ export function Header() {
           to="/"
           className="flex shrink-0 items-center gap-2 rounded-md border border-transparent px-2 py-1.5 hover:border-white/40"
         >
-<<<<<<< Updated upstream
           <div className="flex size-8 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
-=======
-          <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
->>>>>>> Stashed changes
             C
           </div>
           <div className="hidden text-lg font-bold tracking-tight sm:block">
@@ -191,13 +187,7 @@ export function Header() {
               <DropdownMenuLabel>Categorías</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-<<<<<<< Updated upstream
                 onClick={() => navigate({ to: "/products", search: { cat: undefined, q: undefined } as any })}
-=======
-                onClick={() =>
-                  navigate({ to: "/products", search: { cat: undefined, q: undefined } as any })
-                }
->>>>>>> Stashed changes
               >
                 Todas
               </DropdownMenuItem>
@@ -286,11 +276,7 @@ export function Header() {
 
         <Link
           to="/cart"
-<<<<<<< Updated upstream
           className="relative flex shrink-0 items-center gap-1 rounded-md border border-transparent px-2 py-1.5 hover:border-white/40"
-=======
-          className="relative flex items-center gap-1 rounded-md border border-transparent px-2 py-1.5 hover:border-white/40"
->>>>>>> Stashed changes
         >
           <div className="relative">
             <ShoppingCart className="size-7" />
@@ -325,17 +311,11 @@ export function Header() {
           ))}
           <Link
             to="/seller"
-<<<<<<< Updated upstream
             title="Vender en Cenít Pi"
             className="ml-auto max-w-[42%] shrink-0 truncate rounded px-2 py-1 font-semibold text-primary hover:bg-white/10 sm:max-w-none"
           >
             <span className="sm:hidden">Vender</span>
             <span className="hidden sm:inline">Vender en Cenít Pi</span>
-=======
-            className="ml-auto whitespace-nowrap rounded px-2 py-1 font-semibold text-primary hover:bg-white/10"
-          >
-            Vender en Cenít Pi
->>>>>>> Stashed changes
           </Link>
         </div>
       </div>
