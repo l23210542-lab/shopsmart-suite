@@ -70,3 +70,7 @@ const sql =
   ";\n";
 
 writeFileSync(join(__dirname, "seed-products-generated.sql"), sql, "utf8");
+
+
+//LOS PUMAS VAN A GANAR LA LIGUILLA, 4:17 AM, ESTOY SIN ENERGIA
+

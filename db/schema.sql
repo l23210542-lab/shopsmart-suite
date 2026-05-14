@@ -5,6 +5,16 @@
 -- Regenerar catálogo (36 productos como en src/lib/catalog.ts):
 --   node db/generate-seed-products.mjs
 
+--EL PINEDA ME DEBE UNA FERIA
+
+
+--CRUZ AZUL LE GANA LA VUELTA A LAS CHIVAS
+
+
+
+
+
+
 CREATE DATABASE IF NOT EXISTS shopsmart
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
