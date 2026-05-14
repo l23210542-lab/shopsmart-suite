@@ -26,7 +26,7 @@ require APP_ROOT . '/components/header.php';
         <li><a href="admin.php">Administración</a> (pendiente migración CRUD)</li>
       <?php endif; ?>
       <?php if ($user['role'] === 'seller' || $user['role'] === 'admin'): ?>
-        <li><a href="seller.php">Panel vendedor</a> (pendiente)</li>
+        <li><a href="seller.php">Panel vendedor</a> — incluye <a href="seller-ai-assistant.php">Asistente IA</a> (demo)</li>
       <?php endif; ?>
     </ul>
   </div>

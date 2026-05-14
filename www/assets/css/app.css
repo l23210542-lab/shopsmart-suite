@@ -724,12 +724,133 @@ code {
   font-size: 0.9rem;
 }
 
-.form-stack input {
+.form-stack input,
+.form-stack textarea {
   padding: 0.6rem 0.75rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
+  font-family: inherit;
+}
+
+.form-stack textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.stack-links {
+  margin: 1rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--text);
+}
+
+.stack-links li {
+  margin: 0.35rem 0;
+}
+
+/* AI Seller Assistant (demo) */
+.ai-demo-banner {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--primary-soft);
+  color: #e9e0ff;
+  font-size: 0.95rem;
+}
+
+.ai-assistant-grid {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .ai-assistant-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.ai-assistant-form .page-title {
+  margin-top: 0;
+}
+
+.ai-results-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ai-results-title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.ai-scenario-pill {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--accent);
+}
+
+.ai-result-dl {
+  margin: 0;
+}
+
+.ai-result-dl > div {
+  margin-bottom: 1.1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-result-dl > div:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.ai-result-dl dt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.ai-result-dl dd {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.ai-desc {
+  line-height: 1.6;
+}
+
+.ai-price {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.ai-cat-name {
+  font-weight: 600;
+}
+
+.ai-assistant-placeholder {
+  min-height: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .alert {
