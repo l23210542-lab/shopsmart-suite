@@ -61,9 +61,19 @@ function Login() {
         form.setError("root", {
           type: "server",
           message:
-            "No hay conexión a MariaDB. Revisa el archivo .env (DATABASE_URL o DB_HOST, DB_USER, DB_NAME) y que el servidor de base de datos esté en marcha.",
+            "Faltan variables de entorno para MariaDB. Crea o edita .env con DATABASE_URL o DB_HOST, DB_USER y DB_NAME.",
         });
-        toast.error("Acceso no disponible: base de datos no configurada o no responde.");
+        toast.error("Acceso no disponible: base de datos no configurada en el servidor.");
+        return;
+      }
+      if (res.kind === "database_unavailable") {
+        form.setError("root", {
+          type: "server",
+          message:
+            "No se pudo conectar con MariaDB (servicio detenido, puerto incorrecto o credenciales erróneas). Arranca MariaDB/MySQL y vuelve a intentarlo.",
+        });
+        toast.error("No hay conexión con la base de datos. Comprueba que MariaDB esté en ejecución.");
+        return;
       }
     } catch {
       form.setError("root", {

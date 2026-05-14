@@ -68,6 +68,15 @@ function Register() {
         toast.error("Registro denegado: base de datos no configurada o no responde.");
         return;
       }
+      if (res.kind === "database_unavailable") {
+        form.setError("root", {
+          type: "server",
+          message:
+            "No se pudo conectar con MariaDB. Arranca el servicio MySQL/MariaDB, revisa el puerto 3306 y las credenciales en .env, e inténtalo de nuevo.",
+        });
+        toast.error("No hay conexión con la base de datos. MariaDB debe estar en ejecución para registrarte.");
+        return;
+      }
     } catch {
       form.setError("root", {
         type: "server",

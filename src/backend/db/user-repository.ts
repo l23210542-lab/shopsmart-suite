@@ -51,7 +51,7 @@ export async function insertUser(params: {
   if (!pool) return null;
 
   const email = params.email.trim().toLowerCase();
-  const [result] = await pool.execute<ResultSetHeader>(
+  const [result] = await pool.query<ResultSetHeader>(
     "INSERT INTO users (email, name, role, password_hash) VALUES (:email, :name, :role, :password_hash)",
     {
       email,
@@ -61,8 +61,9 @@ export async function insertUser(params: {
     },
   );
 
-  const insertId = Number(result.insertId);
-  if (!Number.isFinite(insertId)) return null;
+  const rawId = result.insertId;
+  const insertId = Number(rawId);
+  if (!Number.isFinite(insertId) || insertId <= 0) return null;
 
   return {
     id: insertId,
