@@ -86,12 +86,12 @@ export const Route = createRootRouteWithContext<{
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Cen├¡t Pi ΓÇö Marketplace sobre Raspberry Pi" },
+      { title: "Cenít Pi — Marketplace sobre Raspberry Pi" },
       {
         name: "description",
         content: "Marketplace e-commerce estilo Amazon, ligero y desplegable sobre Raspberry Pi 4.",
       },
-      { property: "og:title", content: "Cen├¡t Pi" },
+      { property: "og:title", content: "Cenít Pi" },
       { property: "og:description", content: "Marketplace e-commerce sobre Raspberry Pi 4." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

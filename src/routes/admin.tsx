@@ -17,11 +17,11 @@ function Admin() {
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h1 className="text-2xl font-bold">Acceso restringido</h1>
         <p className="mt-2 text-muted-foreground">
-          Inicia sesi├│n como administrador para acceder al panel.
+          Inicia sesión como administrador para acceder al panel.
         </p>
         <Link to="/login">
           <Button className="mt-4 rounded-full bg-primary text-primary-foreground">
-            Iniciar sesi├│n
+            Iniciar sesión
           </Button>
         </Link>
       </div>
@@ -41,8 +41,8 @@ function Admin() {
             { label: "Dashboard", icon: Activity },
             { label: "Usuarios", icon: Users },
             { label: "Productos", icon: Package },
-            { label: "Categor├¡as", icon: Tags },
-            { label: "├ôrdenes", icon: ShoppingBag },
+            { label: "Categorías", icon: Tags },
+            { label: "Órdenes", icon: ShoppingBag },
           ].map((it, i) => (
             <button
               key={it.label}
@@ -57,20 +57,20 @@ function Admin() {
       <section>
         <h1 className="mb-1 text-3xl font-bold">Panel administrativo</h1>
         <p className="mb-6 text-sm text-muted-foreground">
-          Visi├│n general del marketplace Cen├¡t Pi.
+          Visión general del marketplace Cenít Pi.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Stat icon={<Package />} label="Productos" value={products.length.toString()} />
-          <Stat icon={<Tags />} label="Categor├¡as" value={categories.length.toString()} />
-          <Stat icon={<ShoppingBag />} label="├ôrdenes" value={orders.length.toString()} />
+          <Stat icon={<Tags />} label="Categorías" value={categories.length.toString()} />
+          <Stat icon={<ShoppingBag />} label="Órdenes" value={orders.length.toString()} />
           <Stat icon={<Users />} label="Ingresos" value={`$ ${totalRevenue.toFixed(2)}`} />
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <Panel title="├ôrdenes recientes">
+          <Panel title="Órdenes recientes">
             {orders.length === 0 ? (
-              <p className="p-5 text-sm text-muted-foreground">No hay ├│rdenes todav├¡a.</p>
+              <p className="p-5 text-sm text-muted-foreground">No hay órdenes todavía.</p>
             ) : (
               <ul className="divide-y">
                 {orders.slice(0, 5).map((o) => (
@@ -91,7 +91,7 @@ function Admin() {
             )}
           </Panel>
 
-          <Panel title="Categor├¡as destacadas">
+          <Panel title="Categorías destacadas">
             <ul className="divide-y">
               {categories.map((c) => (
                 <li key={c.slug} className="flex items-center justify-between p-4">

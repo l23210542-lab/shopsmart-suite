@@ -14,8 +14,8 @@ function Orders() {
     return (
       <div className="mx-auto max-w-xl px-4 py-20 text-center">
         <Package className="mx-auto mb-4 size-12 text-muted-foreground" />
-        <h1 className="text-2xl font-bold">A├║n no tienes ├│rdenes</h1>
-        <p className="mt-2 text-muted-foreground">Cuando hagas una compra aparecer├í aqu├¡.</p>
+        <h1 className="text-2xl font-bold">Aún no tienes órdenes</h1>
+        <p className="mt-2 text-muted-foreground">Cuando hagas una compra aparecerá aquí.</p>
         <Link to="/products" search={{} as any}>
           <Button className="mt-6 rounded-full bg-primary text-primary-foreground">
             Comprar ahora
@@ -27,7 +27,7 @@ function Orders() {
 
   return (
     <div className="mx-auto max-w-[1100px] px-3 py-6 sm:px-4">
-      <h1 className="mb-6 text-3xl font-bold">Mis ├│rdenes</h1>
+      <h1 className="mb-6 text-3xl font-bold">Mis órdenes</h1>
       <div className="space-y-4">
         {orders.map((o) => (
           <div key={o.id} className="overflow-hidden rounded-xl border bg-card shadow-card">

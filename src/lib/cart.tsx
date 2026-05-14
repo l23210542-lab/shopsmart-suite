@@ -34,7 +34,7 @@ export function CartProvider({
   resolveProduct,
 }: {
   children: ReactNode;
-  /** Si se omite, se usan solo los productos del mock est├ítico. */
+  /** Si se omite, se usan solo los productos del mock estático. */
   resolveProduct?: (id: string) => Product | undefined;
 }) {
   const findProduct = resolveProduct ?? findStaticProduct;

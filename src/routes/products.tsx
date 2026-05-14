@@ -36,7 +36,7 @@ function Products() {
         {/* Sidebar */}
         <aside className="rounded-xl border bg-card p-4 shadow-card md:sticky md:top-32 md:self-start">
           <h3 className="mb-2 text-sm font-bold uppercase tracking-wide text-muted-foreground">
-            Categor├¡as
+            Categorías
           </h3>
           <ul className="space-y-1 text-sm">
             <li>

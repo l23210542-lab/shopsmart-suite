@@ -28,7 +28,7 @@ function Index() {
           </h1>
           <p className="mt-4 max-w-xl text-base text-nav-foreground/80 sm:text-lg">
             Marketplace ligero estilo Amazon construido con PHP 8, MariaDB y un toque de Raspberry.
-            Miles de productos, vendedores locales, env├¡o r├ípido.
+            Miles de productos, vendedores locales, envío rápido.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -36,13 +36,13 @@ function Index() {
               search={{ cat: undefined, q: undefined } as any}
               className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-pop transition hover:brightness-95"
             >
-              Explorar cat├ílogo <ArrowRight className="size-4" />
+              Explorar catálogo <ArrowRight className="size-4" />
             </Link>
             <Link
               to="/seller"
               className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3 text-sm font-bold backdrop-blur hover:bg-white/10"
             >
-              Vender en Cen├¡t Pi
+              Vender en Cenít Pi
             </Link>
           </div>
         </div>
@@ -69,7 +69,7 @@ function Index() {
                   />
                 )}
               </div>
-              <span className="text-xs font-semibold text-price">Comprar ahora ΓåÆ</span>
+              <span className="text-xs font-semibold text-price">Comprar ahora →</span>
             </Link>
           );
         })}
@@ -79,13 +79,13 @@ function Index() {
       <section className="mt-6 grid gap-3 rounded-xl border bg-card p-4 shadow-card sm:grid-cols-3">
         <Trust
           icon={<Truck className="size-5" />}
-          title="Env├¡o local r├ípido"
+          title="Envío local rápido"
           desc="Despachos desde tu Raspberry Pi"
         />
         <Trust
           icon={<ShieldCheck className="size-5" />}
           title="Compra protegida"
-          desc="Devoluciones gratis 30 d├¡as"
+          desc="Devoluciones gratis 30 días"
         />
         <Trust
           icon={<Cpu className="size-5" />}

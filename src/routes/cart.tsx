@@ -14,9 +14,9 @@ function Cart() {
     return (
       <div className="mx-auto max-w-xl px-4 py-20 text-center">
         <ShoppingBag className="mx-auto mb-4 size-12 text-muted-foreground" />
-        <h1 className="text-2xl font-bold">Tu carrito est├í vac├¡o</h1>
+        <h1 className="text-2xl font-bold">Tu carrito está vacío</h1>
         <p className="mt-2 text-muted-foreground">
-          Explora el cat├ílogo y a├▒ade tus primeros productos.
+          Explora el catálogo y añade tus primeros productos.
         </p>
         <Link to="/products" search={{} as any}>
           <Button className="mt-6 rounded-full bg-primary text-primary-foreground">
@@ -100,7 +100,7 @@ function Cart() {
         </div>
 
         <aside className="h-fit rounded-xl border bg-card p-5 shadow-card md:sticky md:top-32">
-          <p className="text-sm text-success">Γ£ô Tu pedido califica para env├¡o GRATIS</p>
+          <p className="text-sm text-success">✓ Tu pedido califica para envío GRATIS</p>
           <div className="mt-3 text-2xl font-bold">Total: $ {subtotal.toFixed(2)}</div>
           <Link to="/checkout">
             <Button className="mt-3 w-full rounded-full bg-primary text-primary-foreground hover:brightness-95">

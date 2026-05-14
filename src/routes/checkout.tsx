@@ -24,7 +24,7 @@ function Checkout() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (items.length === 0) return toast.error("Tu carrito est├í vac├¡o");
+    if (items.length === 0) return toast.error("Tu carrito está vacío");
     const order = placeOrder(address);
     toast.success(`Orden ${order.id} creada`);
     nav({ to: "/orders" });
@@ -35,7 +35,7 @@ function Checkout() {
       <h1 className="mb-6 text-3xl font-bold">Checkout</h1>
       <form onSubmit={submit} className="grid gap-6 md:grid-cols-[1fr_360px]">
         <div className="space-y-4">
-          <Card title="1. Direcci├│n de env├¡o" icon={<MapPin className="size-5" />}>
+          <Card title="1. Dirección de envío" icon={<MapPin className="size-5" />}>
             <div className="grid gap-3 sm:grid-cols-2">
               <Input
                 placeholder="Nombre completo"
@@ -43,20 +43,20 @@ function Checkout() {
                 onChange={(e) => setName(e.target.value)}
                 required
               />
-              <Input placeholder="Tel├⌐fono" defaultValue="+51 999 888 777" required />
+              <Input placeholder="Teléfono" defaultValue="+51 999 888 777" required />
             </div>
             <Input
               className="mt-3"
-              placeholder="Direcci├│n"
+              placeholder="Dirección"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               required
             />
           </Card>
 
-          <Card title="2. M├⌐todo de pago" icon={<CreditCard className="size-5" />}>
+          <Card title="2. Método de pago" icon={<CreditCard className="size-5" />}>
             <Input
-              placeholder="N├║mero de tarjeta"
+              placeholder="Número de tarjeta"
               value={card}
               onChange={(e) => setCard(e.target.value)}
               required
@@ -69,9 +69,9 @@ function Checkout() {
             <p className="mt-2 text-xs text-muted-foreground">Demo: no se procesa pago real.</p>
           </Card>
 
-          <Card title="3. Revisar art├¡culos" icon={<Package className="size-5" />}>
+          <Card title="3. Revisar artículos" icon={<Package className="size-5" />}>
             {items.length === 0 && (
-              <p className="text-sm text-muted-foreground">Tu carrito est├í vac├¡o.</p>
+              <p className="text-sm text-muted-foreground">Tu carrito está vacío.</p>
             )}
             <ul className="divide-y">
               {items.map((i) => {
@@ -97,7 +97,7 @@ function Checkout() {
         <aside className="h-fit rounded-xl border bg-card p-5 shadow-card md:sticky md:top-32">
           <h3 className="mb-3 text-lg font-bold">Resumen</h3>
           <Row label="Subtotal" value={`$ ${subtotal.toFixed(2)}`} />
-          <Row label="Env├¡o" value={shipping === 0 ? "GRATIS" : `$ ${shipping.toFixed(2)}`} />
+          <Row label="Envío" value={shipping === 0 ? "GRATIS" : `$ ${shipping.toFixed(2)}`} />
           <div className="my-3 border-t" />
           <Row label="Total" value={`$ ${total.toFixed(2)}`} bold />
           <Button
@@ -107,7 +107,7 @@ function Checkout() {
             Confirmar pedido
           </Button>
           <p className="mt-2 text-center text-[11px] text-muted-foreground">
-            Al confirmar aceptas los t├⌐rminos de Cen├¡t Pi.
+            Al confirmar aceptas los términos de Cenít Pi.
           </p>
         </aside>
       </form>
