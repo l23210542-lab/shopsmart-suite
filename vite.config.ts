@@ -12,4 +12,14 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  vite: {
+    server: {
+      // host: true → Vite escucha en todas las interfaces (LAN, etc.), equivalente a 0.0.0.0.
+      host: true,
+      port: 5173,
+    },
+    preview: {
+      host: "0.0.0.0",
+    },
+  },
 });
