@@ -34,7 +34,7 @@ export function ProductCard({ product, compact }: { product: Product; compact?: 
           <span>({product.reviews})</span>
         </div>
         <div className="flex items-baseline gap-1">
-          <span className="text-xs text-price">S/</span>
+          <span className="text-xs text-price">$</span>
           <span className="text-xl font-bold text-foreground">{product.price.toFixed(2)}</span>
         </div>
         {!compact && (

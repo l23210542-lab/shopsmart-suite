@@ -31,7 +31,7 @@ function Orders() {
             <div className="flex flex-wrap items-center gap-6 border-b bg-muted px-5 py-3 text-xs">
               <div><div className="text-muted-foreground">Pedido</div><div className="font-semibold">{o.id}</div></div>
               <div><div className="text-muted-foreground">Fecha</div><div className="font-semibold">{new Date(o.date).toLocaleString("es-PE")}</div></div>
-              <div><div className="text-muted-foreground">Total</div><div className="font-semibold">S/ {o.total.toFixed(2)}</div></div>
+              <div><div className="text-muted-foreground">Total</div><div className="font-semibold">$ {o.total.toFixed(2)}</div></div>
               <div><div className="text-muted-foreground">Enviar a</div><div className="font-semibold">{o.address}</div></div>
               <div className="ml-auto flex items-center gap-1 rounded-full bg-success/15 px-3 py-1 font-semibold text-success">
                 <CheckCircle2 className="size-3.5" /> {o.status.toUpperCase()}

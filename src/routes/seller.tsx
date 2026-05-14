@@ -41,7 +41,7 @@ function Seller() {
       <div className="grid gap-4 sm:grid-cols-3">
         <Stat icon={<Package />} label="Productos publicados" value={myProducts.length.toString()} />
         <Stat icon={<ShoppingBag />} label="Órdenes recibidas" value={orders.length.toString()} />
-        <Stat icon={<DollarSign />} label="Ventas totales" value={`S/ ${sales.toFixed(2)}`} />
+        <Stat icon={<DollarSign />} label="Ventas totales" value={`$${sales.toFixed(2)}`} />
       </div>
 
       <div className="mt-8 overflow-hidden rounded-xl border bg-card shadow-card">
@@ -65,12 +65,12 @@ function Seller() {
                 <tr key={p.id} className="hover:bg-accent/40">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <img src={p.image} alt={p.name} className="size-10 rounded object-cover" />
-                      <Link to="/product/$id" params={{ id: p.id }} className="font-medium hover:text-price">{p.name}</Link>
+                      <img src={p.image} alt={p.name} className="size-10 rounded object-cover hidden md:block"/>
+                      <Link to="/product/$id" params={{ id: p.id }} className="font-medium hover:text-price truncate md:whitespace-normal" title={p.name}>{p.name}</Link>
                     </div>
                   </td>
-                  <td className="px-4 py-3">{categories.find((c) => c.slug === p.category)?.name}</td>
-                  <td className="px-4 py-3 font-semibold">S/ {p.price.toFixed(2)}</td>
+                  <td className="px-4 py-3 ">{categories.find((c) => c.slug === p.category)?.name}</td>
+                  <td className="px-4 py-3 font-semibold">${p.price.toFixed(2)}</td>
                   <td className="px-4 py-3">
                     <span className={`rounded-full px-2 py-0.5 text-xs ${p.stock < 5 ? "bg-destructive/15 text-destructive" : "bg-success/15 text-success"}`}>
                       {p.stock}

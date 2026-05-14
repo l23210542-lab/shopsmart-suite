@@ -57,7 +57,7 @@ function Detail() {
           </div>
           <div className="my-4 border-y py-4">
             <div className="flex items-baseline gap-1">
-              <span className="text-xl text-price">S/</span>
+              <span className="text-xl text-price">$</span>
               <span className="text-4xl font-bold">{product.price.toFixed(2)}</span>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">Precio incluye IGV. Envío calculado en checkout.</p>
@@ -72,7 +72,7 @@ function Detail() {
 
         {/* Buy box */}
         <aside className="h-fit rounded-lg border bg-background p-4">
-          <div className="text-2xl font-bold">S/ {product.price.toFixed(2)}</div>
+          <div className="text-2xl font-bold">${product.price.toFixed(2)}</div>
           <p className="mt-1 flex items-center gap-1 text-sm text-success"><Truck className="size-4" /> Envío GRATIS mañana</p>
           <p className="mt-2 text-sm">{product.stock > 5 ? "En stock" : product.stock > 0 ? `Solo quedan ${product.stock}!` : "Agotado"}</p>
 
