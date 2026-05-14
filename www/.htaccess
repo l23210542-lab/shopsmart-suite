@@ -1,0 +1,19 @@
+# Apache: copiar contenido de www/ a DocumentRoot (p. ej. /var/www/html/).
+# PHP 8.x + mod_rewrite opcional.
+
+DirectoryIndex index.php
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# UTF-8 por defecto (MariaDB utf8mb4 alineado con db/schema.sql)
+AddDefaultCharset UTF-8
+
+# No listar directorios
+Options -Indexes
+
+# Si AllowOverride permite, descomenta para forzar HTTPS en producción:
+# RewriteEngine On
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
