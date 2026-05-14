@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { findProduct } from "./catalog";
+﻿import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import type { Product } from "./catalog-types";
+import { findStaticProduct } from "./catalog-static";
 
 export type CartItem = { productId: string; quantity: number };
 export type Order = {
@@ -28,7 +29,15 @@ const CartCtx = createContext<Ctx | null>(null);
 const KEY_CART = "picommerce.cart";
 const KEY_ORDERS = "picommerce.orders";
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({
+  children,
+  resolveProduct,
+}: {
+  children: ReactNode;
+  /** Si se omite, se usan solo los productos del mock estático. */
+  resolveProduct?: (id: string) => Product | undefined;
+}) {
+  const findProduct = resolveProduct ?? findStaticProduct;
   const [items, setItems] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
 
@@ -55,9 +64,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const max = product?.stock ?? 99;
       if (existing) {
         return prev.map((i) =>
-          i.productId === productId
-            ? { ...i, quantity: Math.min(max, i.quantity + qty) }
-            : i,
+          i.productId === productId ? { ...i, quantity: Math.min(max, i.quantity + qty) } : i,
         );
       }
       return [...prev, { productId, quantity: Math.min(max, qty) }];
@@ -99,7 +106,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <CartCtx.Provider value={{ items, add, update, remove, clear, subtotal, count, orders, placeOrder }}>
+    <CartCtx.Provider
+      value={{ items, add, update, remove, clear, subtotal, count, orders, placeOrder }}
+    >
       {children}
     </CartCtx.Provider>
   );
