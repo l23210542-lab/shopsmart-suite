@@ -2,9 +2,17 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { ProductCard } from "./ProductCard";
-import type { Product } from "@/lib/catalog";
+import type { Product } from "@/lib/catalog-types";
 
-export function CategoryRow({ title, slug, items }: { title: string; slug: string; items: Product[] }) {
+export function CategoryRow({
+  title,
+  slug,
+  items,
+}: {
+  title: string;
+  slug: string;
+  items: Product[];
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const scroll = (dir: 1 | -1) => {
     const el = ref.current;
@@ -14,9 +22,19 @@ export function CategoryRow({ title, slug, items }: { title: string; slug: strin
   };
   return (
     <section className="mt-8">
+<<<<<<< Updated upstream
       <div className="mb-3 flex items-end justify-between gap-2 border-b pb-2">
         <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{title}</h2>
         <Link to="/products" search={{ cat: slug, q: undefined } as any} className="text-sm font-medium text-price hover:underline">
+=======
+      <div className="mb-3 flex items-end justify-between border-b pb-2">
+        <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
+        <Link
+          to="/products"
+          search={{ cat: slug, q: undefined } as any}
+          className="text-sm font-medium text-price hover:underline"
+        >
+>>>>>>> Stashed changes
           Ver todo →
         </Link>
       </div>

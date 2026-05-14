@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
-import { categories } from "@/lib/catalog";
+import { useAppCatalog } from "@/lib/use-app-catalog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,6 +82,7 @@ function MobileNavAccount({ onClose }: { onClose: () => void }) {
 }
 
 export function Header() {
+  const { categories } = useAppCatalog();
   const { count } = useCart();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -103,7 +104,11 @@ export function Header() {
           to="/"
           className="flex shrink-0 items-center gap-2 rounded-md border border-transparent px-2 py-1.5 hover:border-white/40"
         >
+<<<<<<< Updated upstream
           <div className="flex size-8 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
+=======
+          <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
+>>>>>>> Stashed changes
             C
           </div>
           <div className="hidden text-lg font-bold tracking-tight sm:block">
@@ -186,14 +191,22 @@ export function Header() {
               <DropdownMenuLabel>Categorías</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
+<<<<<<< Updated upstream
                 onClick={() => navigate({ to: "/products", search: { cat: undefined, q: undefined } as any })}
+=======
+                onClick={() =>
+                  navigate({ to: "/products", search: { cat: undefined, q: undefined } as any })
+                }
+>>>>>>> Stashed changes
               >
                 Todas
               </DropdownMenuItem>
               {categories.map((c) => (
                 <DropdownMenuItem
                   key={c.slug}
-                  onClick={() => navigate({ to: "/products", search: { cat: c.slug, q: undefined } as any })}
+                  onClick={() =>
+                    navigate({ to: "/products", search: { cat: c.slug, q: undefined } as any })
+                  }
                 >
                   {c.name}
                 </DropdownMenuItem>
@@ -218,7 +231,9 @@ export function Header() {
         {/* Account */}
         <DropdownMenu>
           <DropdownMenuTrigger className="hidden rounded-md border border-transparent px-2 py-1.5 text-left text-xs hover:border-white/40 md:block">
-            <div className="text-[10px] text-nav-foreground/70">Hola, {user?.name ?? "Inicia sesión"}</div>
+            <div className="text-[10px] text-nav-foreground/70">
+              Hola, {user?.name ?? "Inicia sesión"}
+            </div>
             <div className="flex items-center gap-1 font-semibold">
               <User className="size-3.5" /> Cuenta y listas
             </div>
@@ -230,20 +245,30 @@ export function Header() {
                   {user.email} · {user.role}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate({ to: "/orders" })}>Mis órdenes</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate({ to: "/orders" })}>
+                  Mis órdenes
+                </DropdownMenuItem>
                 {user.role !== "customer" && (
-                  <DropdownMenuItem onClick={() => navigate({ to: "/seller" })}>Panel vendedor</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate({ to: "/seller" })}>
+                    Panel vendedor
+                  </DropdownMenuItem>
                 )}
                 {user.role === "admin" && (
-                  <DropdownMenuItem onClick={() => navigate({ to: "/admin" })}>Panel admin</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate({ to: "/admin" })}>
+                    Panel admin
+                  </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>Cerrar sesión</DropdownMenuItem>
               </>
             ) : (
               <>
-                <DropdownMenuItem onClick={() => navigate({ to: "/login" })}>Iniciar sesión</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate({ to: "/register" })}>Crear cuenta</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate({ to: "/login" })}>
+                  Iniciar sesión
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate({ to: "/register" })}>
+                  Crear cuenta
+                </DropdownMenuItem>
               </>
             )}
           </DropdownMenuContent>
@@ -261,7 +286,11 @@ export function Header() {
 
         <Link
           to="/cart"
+<<<<<<< Updated upstream
           className="relative flex shrink-0 items-center gap-1 rounded-md border border-transparent px-2 py-1.5 hover:border-white/40"
+=======
+          className="relative flex items-center gap-1 rounded-md border border-transparent px-2 py-1.5 hover:border-white/40"
+>>>>>>> Stashed changes
         >
           <div className="relative">
             <ShoppingCart className="size-7" />
@@ -296,11 +325,17 @@ export function Header() {
           ))}
           <Link
             to="/seller"
+<<<<<<< Updated upstream
             title="Vender en Cenít Pi"
             className="ml-auto max-w-[42%] shrink-0 truncate rounded px-2 py-1 font-semibold text-primary hover:bg-white/10 sm:max-w-none"
           >
             <span className="sm:hidden">Vender</span>
             <span className="hidden sm:inline">Vender en Cenít Pi</span>
+=======
+            className="ml-auto whitespace-nowrap rounded px-2 py-1 font-semibold text-primary hover:bg-white/10"
+          >
+            Vender en Cenít Pi
+>>>>>>> Stashed changes
           </Link>
         </div>
       </div>

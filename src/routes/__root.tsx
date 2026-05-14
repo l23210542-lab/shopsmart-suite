@@ -14,6 +14,8 @@ import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
+import { resolveCatalogForApp } from "@/lib/catalog-resolve";
+import type { AppCatalogBundle } from "@/lib/catalog-types";
 
 function NotFoundComponent() {
   return (
@@ -72,13 +74,23 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+  catalog: AppCatalogBundle;
+}>()({
+  beforeLoad: async () => {
+    const catalog = await resolveCatalogForApp();
+    return { catalog };
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Cenít Pi — Marketplace sobre Raspberry Pi" },
-      { name: "description", content: "Marketplace e-commerce estilo Amazon, ligero y desplegable sobre Raspberry Pi 4." },
+      {
+        name: "description",
+        content: "Marketplace e-commerce estilo Amazon, ligero y desplegable sobre Raspberry Pi 4.",
+      },
       { property: "og:title", content: "Cenít Pi" },
       { property: "og:description", content: "Marketplace e-commerce sobre Raspberry Pi 4." },
       { property: "og:type", content: "website" },
@@ -112,12 +124,12 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
+  const { queryClient, catalog } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <CartProvider>
+        <CartProvider resolveProduct={(id) => catalog.products.find((p) => p.id === id)}>
           <div className="flex min-h-screen flex-col bg-background">
             <Header />
             <main className="flex-1">

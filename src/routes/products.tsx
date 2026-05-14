@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
-import { categories, products } from "@/lib/catalog";
+import { useAppCatalog } from "@/lib/use-app-catalog";
 import { ProductCard } from "@/components/ProductCard";
 
 const productSearchSchema = z.object({
@@ -15,13 +15,16 @@ export const Route = createFileRoute("/products")({
 });
 
 function Products() {
+  const { categories, products } = useAppCatalog();
   const { q, cat, sort = "relevant" } = Route.useSearch();
 
   let items = products;
   if (cat) items = items.filter((p) => p.category === cat);
   if (q) {
     const t = q.toLowerCase();
-    items = items.filter((p) => p.name.toLowerCase().includes(t) || p.description.toLowerCase().includes(t));
+    items = items.filter(
+      (p) => p.name.toLowerCase().includes(t) || p.description.toLowerCase().includes(t),
+    );
   }
   if (sort === "price-asc") items = [...items].sort((a, b) => a.price - b.price);
   if (sort === "price-desc") items = [...items].sort((a, b) => b.price - a.price);
@@ -32,10 +35,16 @@ function Products() {
       <div className="grid gap-6 md:grid-cols-[220px_1fr]">
         {/* Sidebar */}
         <aside className="rounded-xl border bg-card p-4 shadow-card md:sticky md:top-32 md:self-start">
-          <h3 className="mb-2 text-sm font-bold uppercase tracking-wide text-muted-foreground">Categorías</h3>
+          <h3 className="mb-2 text-sm font-bold uppercase tracking-wide text-muted-foreground">
+            Categorías
+          </h3>
           <ul className="space-y-1 text-sm">
             <li>
-              <Link to="/products" search={{ cat: undefined, q, sort } as any} className={`block rounded px-2 py-1 hover:bg-accent ${!cat ? "bg-accent font-semibold" : ""}`}>
+              <Link
+                to="/products"
+                search={{ cat: undefined, q, sort } as any}
+                className={`block rounded px-2 py-1 hover:bg-accent ${!cat ? "bg-accent font-semibold" : ""}`}
+              >
                 Todas
               </Link>
             </li>
@@ -57,7 +66,11 @@ function Products() {
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
               <h1 className="text-2xl font-bold">
-                {q ? `Resultados para "${q}"` : cat ? categories.find((c) => c.slug === cat)?.name : "Todos los productos"}
+                {q
+                  ? `Resultados para "${q}"`
+                  : cat
+                    ? categories.find((c) => c.slug === cat)?.name
+                    : "Todos los productos"}
               </h1>
               <p className="text-sm text-muted-foreground">{items.length} productos encontrados</p>
             </div>

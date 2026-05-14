@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/cart";
-import { products, categories } from "@/lib/catalog";
+import { useAppCatalog } from "@/lib/use-app-catalog";
 import { Button } from "@/components/ui/button";
 import { Users, ShoppingBag, Package, Tags, Activity } from "lucide-react";
 
@@ -10,13 +10,20 @@ export const Route = createFileRoute("/admin")({ component: Admin });
 function Admin() {
   const { user } = useAuth();
   const { orders } = useCart();
+  const { products, categories } = useAppCatalog();
 
   if (!user || user.role !== "admin") {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h1 className="text-2xl font-bold">Acceso restringido</h1>
-        <p className="mt-2 text-muted-foreground">Inicia sesión como administrador para acceder al panel.</p>
-        <Link to="/login"><Button className="mt-4 rounded-full bg-primary text-primary-foreground">Iniciar sesión</Button></Link>
+        <p className="mt-2 text-muted-foreground">
+          Inicia sesión como administrador para acceder al panel.
+        </p>
+        <Link to="/login">
+          <Button className="mt-4 rounded-full bg-primary text-primary-foreground">
+            Iniciar sesión
+          </Button>
+        </Link>
       </div>
     );
   }
@@ -26,7 +33,9 @@ function Admin() {
   return (
     <div className="mx-auto grid max-w-[1400px] gap-6 px-3 py-6 sm:px-4 md:grid-cols-[220px_1fr]">
       <aside className="h-fit rounded-xl border bg-card p-4 shadow-card md:sticky md:top-32">
-        <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Admin</h3>
+        <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">
+          Admin
+        </h3>
         <nav className="space-y-1 text-sm">
           {[
             { label: "Dashboard", icon: Activity },
@@ -35,7 +44,10 @@ function Admin() {
             { label: "Categorías", icon: Tags },
             { label: "Órdenes", icon: ShoppingBag },
           ].map((it, i) => (
-            <button key={it.label} className={`flex w-full items-center gap-2 rounded px-2 py-1.5 hover:bg-accent ${i === 0 ? "bg-accent font-semibold" : ""}`}>
+            <button
+              key={it.label}
+              className={`flex w-full items-center gap-2 rounded px-2 py-1.5 hover:bg-accent ${i === 0 ? "bg-accent font-semibold" : ""}`}
+            >
               <it.icon className="size-4" /> {it.label}
             </button>
           ))}
@@ -44,7 +56,9 @@ function Admin() {
 
       <section>
         <h1 className="mb-1 text-3xl font-bold">Panel administrativo</h1>
-        <p className="mb-6 text-sm text-muted-foreground">Visión general del marketplace Cenít Pi.</p>
+        <p className="mb-6 text-sm text-muted-foreground">
+          Visión general del marketplace Cenít Pi.
+        </p>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Stat icon={<Package />} label="Productos" value={products.length.toString()} />
@@ -63,7 +77,9 @@ function Admin() {
                   <li key={o.id} className="flex items-center justify-between p-4">
                     <div>
                       <div className="font-semibold">{o.id}</div>
-                      <div className="text-xs text-muted-foreground">{new Date(o.date).toLocaleString("es-PE")}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {new Date(o.date).toLocaleString("es-PE")}
+                      </div>
                     </div>
                     <div className="text-right">
                       <div className="font-bold">S/ {o.total.toFixed(2)}</div>
@@ -97,7 +113,9 @@ function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; va
   return (
     <div className="rounded-xl border bg-card p-5 shadow-card">
       <div className="flex items-center gap-3">
-        <div className="flex size-10 items-center justify-center rounded-full bg-primary/15 text-price">{icon}</div>
+        <div className="flex size-10 items-center justify-center rounded-full bg-primary/15 text-price">
+          {icon}
+        </div>
         <div>
           <div className="text-xs text-muted-foreground">{label}</div>
           <div className="text-2xl font-bold">{value}</div>
