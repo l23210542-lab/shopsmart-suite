@@ -1,9 +1,18 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/cart";
 import { useAppCatalog } from "@/lib/use-app-catalog";
 import { Button } from "@/components/ui/button";
 import { Plus, Package, DollarSign, ShoppingBag, Pencil, Trash2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/seller")({ component: Seller });
 
@@ -11,6 +20,7 @@ function Seller() {
   const { user } = useAuth();
   const { orders } = useCart();
   const { products, categories, findProduct } = useAppCatalog();
+  const [publishOpen, setPublishOpen] = useState(false);
 
   // Mock: every product whose id ends in odd number "belongs" to this seller
   const myProducts = products.slice(0, 10);
@@ -44,9 +54,35 @@ function Seller() {
             Hola, {user.name}. Aquí puedes gestionar tu catálogo.
           </p>
         </div>
-        <Button className="rounded-full bg-primary text-primary-foreground">
-          <Plus className="mr-1 size-4" /> Publicar producto
-        </Button>
+        <Dialog open={publishOpen} onOpenChange={setPublishOpen}>
+          <Button
+            type="button"
+            className="rounded-full bg-primary text-primary-foreground"
+            onClick={() => setPublishOpen(true)}
+          >
+            <Plus className="mr-1 size-4" /> Publicar producto
+          </Button>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Publicar producto</DialogTitle>
+              <DialogDescription>
+                Especifica el nombre, precio, cantidad e imagen del producto aquí abajo.
+              </DialogDescription>
+            </DialogHeader>
+            <input type="text" placeholder="Nombre del producto" className="w-full rounded-full border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+            <input type="number" placeholder="Precio del producto" className="w-full rounded-full border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+            <input type="number" placeholder="Stock del producto" className="w-full rounded-full border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+            <input type="file" placeholder="Imagen del producto" className="w-full rounded-full border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setPublishOpen(false)} className="m-1">
+                Cancelar
+              </Button>
+              <Button type="button" onClick={() => setPublishOpen(false)} className="m-1">
+                Guardar (demo)
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
