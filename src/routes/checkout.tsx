@@ -22,7 +22,9 @@ import {
   Package,
   ShieldCheck,
   Store,
+  Truck,
   Wallet,
+  Zap,
 } from "lucide-react";
 
 export const Route = createFileRoute("/checkout")({ component: Checkout });
@@ -33,6 +35,25 @@ type Step = 1 | 2 | 3;
 const PAYPAL_WEB_URL = "https://www.paypal.com/signin";
 
 type PaymentMethod = "card" | "paypal" | "cash";
+
+/** Umbral (subtotal) para envío estándar gratis. */
+const FREE_SHIPPING_THRESHOLD = 100;
+/** Coste envío estándar si el subtotal no alcanza el umbral. */
+const STANDARD_SHIPPING_FLAT = 9.9;
+/** Recargo fijo del envío Plus (se suma al coste del envío estándar calculado). */
+const PLUS_SHIPPING_SURCHARGE = 8.5;
+
+type ShippingTier = "standard" | "plus";
+
+function shippingAmountForTier(subtotal: number, tier: ShippingTier): number {
+  const standardBase = subtotal > FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING_FLAT;
+  const raw = tier === "standard" ? standardBase : standardBase + PLUS_SHIPPING_SURCHARGE;
+  return Math.round(raw * 100) / 100;
+}
+
+function shippingTierLabel(tier: ShippingTier): string {
+  return tier === "plus" ? "Plus" : "Estándar";
+}
 
 const STEPS: { step: Step; title: string; short: string }[] = [
   { step: 1, title: "Resumen de orden", short: "Resumen" },
@@ -79,6 +100,7 @@ function Checkout() {
   const [city, setCity] = useState("Lima");
   const [reference, setReference] = useState("");
 
+  const [shippingTier, setShippingTier] = useState<ShippingTier>("standard");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
   const [cashReference, setCashReference] = useState<string | null>(null);
 
@@ -101,10 +123,19 @@ function Checkout() {
     if (user?.name && !fullName) setFullName(user.name);
   }, [user?.name, fullName]);
 
-  const shipping = useMemo(() => (subtotal > 100 ? 0 : 9.9), [subtotal]);
+  const shipping = useMemo(() => shippingAmountForTier(subtotal, shippingTier), [subtotal, shippingTier]);
+  const standardShippingPreview = useMemo(() => shippingAmountForTier(subtotal, "standard"), [subtotal]);
+  const plusShippingPreview = useMemo(() => shippingAmountForTier(subtotal, "plus"), [subtotal]);
   const total = useMemo(
     () => Math.round((subtotal + shipping) * 100) / 100,
     [subtotal, shipping],
+  );
+
+  /** En el paso 1 el resumen lateral asume envío Estándar hasta que elijas en el paso 2. */
+  const sidebarShipping = step === 1 ? standardShippingPreview : shipping;
+  const sidebarTotal = useMemo(
+    () => Math.round((subtotal + sidebarShipping) * 100) / 100,
+    [subtotal, sidebarShipping],
   );
 
   const cardLast4 = useMemo(() => {
@@ -162,7 +193,11 @@ function Checkout() {
       toast.error("Debes aceptar los términos para continuar.");
       return;
     }
-    const address = formatShippingBlock({
+    const shippingLine =
+      shippingTier === "plus"
+        ? `Envío: Plus (prioridad, entrega acelerada) — ${shipping === 0 ? "Gratis" : `$${shipping.toFixed(2)}`}`
+        : `Envío: Estándar — ${shipping === 0 ? "Gratis" : `$${shipping.toFixed(2)}`}`;
+    const address = `${formatShippingBlock({
       fullName,
       phone,
       line1,
@@ -171,7 +206,7 @@ function Checkout() {
       city,
       reference,
       postal,
-    });
+    })}\n${shippingLine}`;
     const order = placeOrder({ address, subtotal, shipping });
     toast.success(`Pedido ${order.id} confirmado`);
     nav({ to: "/orders" });
@@ -188,7 +223,7 @@ function Checkout() {
       </div>
       <h1 className="mb-2 text-3xl font-bold">Checkout</h1>
       <p className="mb-8 max-w-2xl text-sm text-muted-foreground">
-        Completa los pasos: revisa tu pedido, elige método de pago (tarjeta, PayPal o efectivo en tienda) y confirma la compra. Los cobros reales requieren integración con pasarelas.
+        Completa los pasos: revisa tu pedido, elige envío Estándar o Plus, método de pago y confirma. Los cobros reales requieren integración con pasarelas.
       </p>
 
       <StepIndicator current={step} onSelect={(s) => s < step && goStep(s)} />
@@ -244,8 +279,8 @@ function Checkout() {
                     </table>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Envío estimado: {shipping === 0 ? "gratis por compra mayor a $100" : `$${shipping.toFixed(2)}`}. Podrás revisar totales en el panel
-                    lateral y en el paso final.
+                    Envío estándar gratis si el subtotal supera ${FREE_SHIPPING_THRESHOLD}. En el siguiente paso podrás elegir{" "}
+                    <strong className="text-foreground">Plus</strong> con entrega prioritaria por un recargo adicional. Revisa totales en el panel lateral.
                   </p>
                   <div className="flex justify-end gap-2">
                     <Button asChild variant="outline" className="rounded-full">
@@ -313,6 +348,71 @@ function Checkout() {
                     placeholder="Portón azul, timbre 402"
                   />
                 </div>
+              </SectionCard>
+
+              <SectionCard
+                title="Método de envío"
+                description="Estándar es la opción económica; Plus añade velocidad, seguimiento prioritario y protección extra por un recargo fijo."
+                icon={<Truck className="size-5" />}
+              >
+                <RadioGroup
+                  value={shippingTier}
+                  onValueChange={(v) => setShippingTier(v as ShippingTier)}
+                  className="grid gap-3 md:grid-cols-2"
+                >
+                  <label
+                    htmlFor="ship-standard"
+                    className={cn(
+                      "flex cursor-pointer flex-col gap-3 rounded-lg border p-4 transition-colors",
+                      shippingTier === "standard" ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "hover:bg-muted/40",
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="standard" id="ship-standard" />
+                        <Truck className="size-4 shrink-0 text-muted-foreground" />
+                        <span className="text-sm font-semibold">Estándar</span>
+                      </div>
+                      <span className="shrink-0 text-sm font-bold tabular-nums text-foreground">
+                        {standardShippingPreview === 0 ? "Gratis" : `$${standardShippingPreview.toFixed(2)}`}
+                      </span>
+                    </div>
+                    <ul className="list-disc space-y-1 pl-6 text-xs text-muted-foreground">
+                      <li>Entrega en 5–7 días hábiles (según zona)</li>
+                      <li>Seguimiento estándar por correo y en tu cuenta</li>
+                      <li>Embalaje convencional</li>
+                      <li>
+                        Gratis si el subtotal supera ${FREE_SHIPPING_THRESHOLD}; si no, ${STANDARD_SHIPPING_FLAT.toFixed(2)}
+                      </li>
+                    </ul>
+                  </label>
+                  <label
+                    htmlFor="ship-plus"
+                    className={cn(
+                      "flex cursor-pointer flex-col gap-3 rounded-lg border p-4 transition-colors",
+                      shippingTier === "plus" ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "hover:bg-muted/40",
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="plus" id="ship-plus" />
+                        <Zap className="size-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                        <span className="text-sm font-semibold">Plus</span>
+                      </div>
+                      <span className="shrink-0 text-sm font-bold tabular-nums text-foreground">${plusShippingPreview.toFixed(2)}</span>
+                    </div>
+                    <ul className="list-disc space-y-1 pl-6 text-xs text-muted-foreground">
+                      <li>Salida prioritaria del almacén y ruta acelerada (24–72 h hábiles típicas)</li>
+                      <li>Seguimiento detallado y notificaciones push prioritarias</li>
+                      <li>Seguro de envío incluido hasta $200 del valor declarado (demo)</li>
+                      <li>Embalaje reforzado y canal de soporte preferente</li>
+                      <li>
+                        Incluye el coste del envío estándar + <strong className="text-foreground">${PLUS_SHIPPING_SURCHARGE.toFixed(2)}</strong> de
+                        servicio Plus
+                      </li>
+                    </ul>
+                  </label>
+                </RadioGroup>
               </SectionCard>
 
               <SectionCard
@@ -476,6 +576,18 @@ function Checkout() {
                   <pre className="whitespace-pre-wrap rounded-lg border bg-muted/40 p-4 font-sans text-muted-foreground">
                     {formatShippingBlock({ fullName, phone, line1, line2, district, city, reference, postal })}
                   </pre>
+                  <div className="mt-3 rounded-lg border border-dashed bg-muted/30 p-3 text-sm text-muted-foreground">
+                    <p className="font-semibold text-foreground">
+                      Envío {shippingTierLabel(shippingTier)} — {shipping === 0 ? "Gratis" : `$${shipping.toFixed(2)}`}
+                    </p>
+                    {shippingTier === "plus" ? (
+                      <p className="mt-1 text-xs">
+                        Incluye prioridad en almacén, entrega acelerada, seguimiento preferente, seguro demo y embalaje reforzado.
+                      </p>
+                    ) : (
+                      <p className="mt-1 text-xs">Entrega estándar con seguimiento básico. Gratis si el subtotal supera ${FREE_SHIPPING_THRESHOLD}.</p>
+                    )}
+                  </div>
                 </div>
                 <Separator />
                 <div>
@@ -573,9 +685,17 @@ function Checkout() {
             </div>
             <Separator className="my-4" />
             <SummaryRow label="Subtotal" value={`$${subtotal.toFixed(2)}`} />
-            <SummaryRow label="Envío" value={shipping === 0 ? "Gratis" : `$${shipping.toFixed(2)}`} />
+            <SummaryRow
+              label={step === 1 ? "Envío (estimado)" : `Envío (${shippingTierLabel(shippingTier)})`}
+              value={sidebarShipping === 0 ? "Gratis" : `$${sidebarShipping.toFixed(2)}`}
+            />
+            {step === 1 && (
+              <p className="text-[11px] leading-snug text-muted-foreground">
+                Estimación con envío Estándar. Plus (+${PLUS_SHIPPING_SURCHARGE.toFixed(2)}) en el paso 2.
+              </p>
+            )}
             <Separator className="my-3" />
-            <SummaryRow label="Total estimado" value={`$${total.toFixed(2)}`} bold />
+            <SummaryRow label="Total estimado" value={`$${sidebarTotal.toFixed(2)}`} bold />
           </div>
 
           {step === 1 && items.length > 0 && (
