@@ -19,14 +19,14 @@ function Index() {
             backgroundSize: "40px 40px, 60px 60px",
           }}
         />
-        <div className="relative max-w-2xl">
+        <div className="relative max-w-2xl z-30">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold text-primary backdrop-blur">
             <Cpu className="size-3.5" /> Corre 100% sobre Raspberry Pi 4
           </div>
           <h1 className="text-4xl font-bold leading-tight sm:text-6xl">
             Compra todo. <span className="text-primary">En cualquier lugar.</span>
           </h1>
-          <p className="mt-4 max-w-xl text-base text-nav-foreground/80 sm:text-lg">
+          <p className="z-50 mt-4 max-w-xl text-base text-nav-foreground/80 sm:text-lg">
             Marketplace ligero estilo Amazon construido con PHP 8, MariaDB y un toque de Raspberry.
             Miles de productos, vendedores locales, envío rápido.
           </p>
@@ -44,8 +44,11 @@ function Index() {
             >
               Vender en Cenít Pi
             </Link>
+            
           </div>
+          
         </div>
+        <img src="src\imgs\logo.png" className="z-0 w-xs sm:w-sm md:w-md absolute -bottom-30 -right-20 opacity-30 fadein-anim"></img>
       </section>
 
       {/* Quick categories */}

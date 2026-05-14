@@ -115,3 +115,13 @@
   .shadow-card { box-shadow: var(--shadow-card); }
   .shadow-pop { box-shadow: var(--shadow-pop); }
 }
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: .3; }
+}
+
+.fadein-anim {
+  animation: fadeIn 1s ease-in-out;
+}
