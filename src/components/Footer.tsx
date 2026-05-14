@@ -3,9 +3,9 @@ import { Link } from "@tanstack/react-router";
 export function Footer() {
   return (
     <footer className="mt-16 bg-nav text-nav-foreground">
-      <Link to="/" className="block bg-nav-accent py-3 text-center text-sm font-semibold hover:bg-nav-accent/80">
+      <button type="button" onClick={()=>{window.scrollTo({ top: 0, behavior: "smooth"})}} className="block w-full bg-nav-accent py-3 text-center text-sm font-semibold hover:bg-nav-accent/80 cursor-pointer">
         Volver arriba
-      </Link>
+      </button>
       <div className="mx-auto grid max-w-[1400px] gap-8 px-6 py-10 sm:grid-cols-2 md:grid-cols-4">
         <div>
           <h4 className="mb-3 font-bold">Conócenos</h4>

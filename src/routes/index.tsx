@@ -40,7 +40,7 @@ function Index() {
       </section>
 
       {/* Quick categories */}
-      <section className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="mt-6 grid gap-3 grid-cols-2 lg:grid-cols-4">
         {categories.slice(0, 4).map((c) => {
           const sample = productsByCategory(c.slug)[0];
           return (
