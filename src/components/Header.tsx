@@ -104,9 +104,7 @@ export function Header() {
           to="/"
           className="flex shrink-0 items-center gap-2 rounded-md border border-transparent px-2 py-1.5 hover:border-white/40"
         >
-          <div className="flex size-8 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
-            C
-          </div>
+          <img src="src\imgs\logo.png" alt="Cenít Pi" className="size-8" />
           <div className="hidden text-lg font-bold tracking-tight sm:block">
             Cenít <span className="text-primary">Pi</span>
           </div>
