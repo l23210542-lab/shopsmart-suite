@@ -55,13 +55,13 @@ export async function fetchProductsFromDb(): Promise<Product[] | null> {
             p.description,
             p.price,
             p.stock,
-            p.image,
+            p.image_url AS image,
             c.slug AS category,
             p.seller_name AS seller,
             p.rating,
-            p.reviews
+            p.review_count AS reviews
        FROM products p
-       INNER JOIN categories c ON c.id = p.category_id
+       INNER JOIN categories c ON c.slug = p.category_slug
        ORDER BY p.name ASC`,
   );
   return rows.map(mapProduct);
@@ -77,13 +77,13 @@ export async function fetchProductByIdFromDb(id: string): Promise<Product | null
             p.description,
             p.price,
             p.stock,
-            p.image,
+            p.image_url AS image,
             c.slug AS category,
             p.seller_name AS seller,
             p.rating,
-            p.reviews
+            p.review_count AS reviews
        FROM products p
-       INNER JOIN categories c ON c.id = p.category_id
+       INNER JOIN categories c ON c.slug = p.category_slug
       WHERE p.id = :id
       LIMIT 1`,
     { id },

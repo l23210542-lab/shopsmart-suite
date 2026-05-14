@@ -1,5 +1,6 @@
 import "./lib/error-capture";
 
+import { scheduleDatabaseWarmup } from "./backend/db/warmup";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 
@@ -65,6 +66,8 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   console.error(consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`));
   return brandedErrorResponse();
 }
+
+scheduleDatabaseWarmup();
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {

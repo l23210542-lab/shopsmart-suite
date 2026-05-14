@@ -1,10 +1,13 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 export type Role = "customer" | "seller" | "admin";
-export type User = { name: string; email: string; role: Role };
+export type User = { id?: number; name: string; email: string; role: Role };
 
 type Ctx = {
   user: User | null;
+  /** Sesión explícita (p. ej. tras validar credenciales en el servidor). */
+  setUser: (user: User | null) => void;
+  /** Modo sin MariaDB: guarda sesión solo en el cliente. */
   login: (email: string, role?: Role) => void;
   register: (name: string, email: string, role?: Role) => void;
   logout: () => void;
@@ -28,6 +31,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     else localStorage.removeItem(KEY);
   }, [user]);
 
+  const setSessionUser: Ctx["setUser"] = (next) => {
+    setUser(next);
+  };
+
   const login: Ctx["login"] = (email, role = "customer") => {
     setUser({ name: email.split("@")[0] || "Usuario", email, role });
   };
@@ -36,7 +43,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
   const logout = () => setUser(null);
 
-  return <AuthCtx.Provider value={{ user, login, register, logout }}>{children}</AuthCtx.Provider>;
+  return (
+    <AuthCtx.Provider value={{ user, setUser: setSessionUser, login, register, logout }}>
+      {children}
+    </AuthCtx.Provider>
+  );
 }
 
 export function useAuth() {
