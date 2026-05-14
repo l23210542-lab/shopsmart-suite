@@ -35,7 +35,7 @@ function Checkout() {
       <h1 className="mb-6 text-3xl font-bold">Checkout</h1>
       <form onSubmit={submit} className="grid gap-6 md:grid-cols-[1fr_360px]">
         <div className="space-y-4">
-          <Card title="1. Dirección de envio" icon={<MapPin className="size-5" />}>
+          <Card title="1. Dirección de envío" icon={<MapPin className="size-5" />}>
             <div className="grid gap-3 sm:grid-cols-2">
               <Input
                 placeholder="Nombre completo"
@@ -85,7 +85,7 @@ function Checkout() {
                       <div className="text-xs text-muted-foreground">Cant. {i.quantity}</div>
                     </div>
                     <div className="text-sm font-semibold">
-                      $ {(p.price * i.quantity).toFixed(2)}
+                      ${(p.price * i.quantity).toFixed(2)}
                     </div>
                   </li>
                 );
@@ -96,10 +96,10 @@ function Checkout() {
 
         <aside className="h-fit rounded-xl border bg-card p-5 shadow-card md:sticky md:top-32">
           <h3 className="mb-3 text-lg font-bold">Resumen</h3>
-          <Row label="Subtotal" value={`$ ${subtotal.toFixed(2)}`} />
-          <Row label="Envio" value={shipping === 0 ? "GRATIS" : `$ ${shipping.toFixed(2)}`} />
+          <Row label="Subtotal" value={`$${subtotal.toFixed(2)}`} />
+          <Row label="Envío" value={shipping === 0 ? "GRATIS" : `$${shipping.toFixed(2)}`} />
           <div className="my-3 border-t" />
-          <Row label="Total" value={`$ ${total.toFixed(2)}`} bold />
+          <Row label="Total" value={`$${total.toFixed(2)}`} bold />
           <Button
             type="submit"
             className="mt-4 w-full rounded-full bg-primary text-primary-foreground hover:brightness-95"
@@ -107,7 +107,7 @@ function Checkout() {
             Confirmar pedido
           </Button>
           <p className="mt-2 text-center text-[11px] text-muted-foreground">
-            Al confirmar aceptas los términos de Cenit Pi.
+            Al confirmar aceptas los términos de Cenít Pi.
           </p>
         </aside>
       </form>
