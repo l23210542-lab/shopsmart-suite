@@ -1,0 +1,28 @@
+# MariaDB local para desarrollo (misma base que `db/schema.sql`: shopsmart).
+# Uso: `npm run db:up` o `npm run dev:stack` (arranca contenedor + Vite).
+# Credenciales por defecto: root / devroot (cámbialas en producción).
+
+services:
+  mariadb:
+    image: mariadb:11
+    container_name: shopsmart-mariadb
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: devroot
+      MYSQL_DATABASE: shopsmart
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./db/seed-products-generated.sql:/docker-entrypoint-initdb.d/03-seed-products.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 4s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+volumes:
+  mariadb_data:

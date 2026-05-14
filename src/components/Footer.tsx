@@ -1,6 +1,11 @@
-import { Link } from "@tanstack/react-router";
+import type { AppCatalogBundle } from "@/lib/catalog-types";
 
-export function Footer() {
+type FooterProps = {
+  /** Si la app cargó el catálogo desde MariaDB o desde datos estáticos. */
+  catalogSource: AppCatalogBundle["source"];
+};
+
+export function Footer({ catalogSource }: FooterProps) {
   return (
     <footer className="mt-16 bg-nav text-nav-foreground">
       <button type="button" onClick={()=>{window.scrollTo({ top: 0, behavior: "smooth"})}} className="block w-full bg-nav-accent py-3 text-center text-sm font-semibold hover:bg-nav-accent/80 cursor-pointer">
@@ -33,7 +38,13 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-nav-foreground/60">
-        © {new Date().getFullYear()} Cenít Pi — Hackathon Edition
+        <p>
+          Catálogo:{" "}
+          <span className={catalogSource === "mariadb" ? "font-semibold text-emerald-300" : "font-medium text-amber-200"}>
+            {catalogSource === "mariadb" ? "MariaDB (conectado)" : "datos estáticos (sin BD o tablas vacías)"}
+          </span>
+        </p>
+        <p className="mt-1">© {new Date().getFullYear()} Cenít Pi — Hackathon Edition</p>
       </div>
     </footer>
   );

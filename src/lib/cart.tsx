@@ -7,9 +7,20 @@ export type Order = {
   id: string;
   date: string;
   items: CartItem[];
-  total: number;
   address: string;
   status: "pendiente" | "pagada" | "enviada" | "entregada";
+  /** Subtotal de productos (sin envío). Pedidos antiguos pueden no tenerlo. */
+  subtotal?: number;
+  /** Costo de envío. */
+  shipping?: number;
+  /** Total pagado (subtotal + envío cuando existen ambos). */
+  total: number;
+};
+
+export type PlaceOrderPayload = {
+  address: string;
+  subtotal: number;
+  shipping: number;
 };
 
 type Ctx = {
@@ -21,7 +32,7 @@ type Ctx = {
   subtotal: number;
   count: number;
   orders: Order[];
-  placeOrder: (address: string) => Order;
+  placeOrder: (payload: PlaceOrderPayload) => Order;
 };
 
 const CartCtx = createContext<Ctx | null>(null);
@@ -91,13 +102,16 @@ export function CartProvider({
 
   const count = items.reduce((s, i) => s + i.quantity, 0);
 
-  const placeOrder: Ctx["placeOrder"] = (address) => {
+  const placeOrder: Ctx["placeOrder"] = (payload) => {
+    const total = Math.round((payload.subtotal + payload.shipping) * 100) / 100;
     const order: Order = {
       id: `O-${Date.now().toString().slice(-6)}`,
       date: new Date().toISOString(),
       items,
-      total: subtotal,
-      address,
+      total,
+      subtotal: payload.subtotal,
+      shipping: payload.shipping,
+      address: payload.address,
       status: "pagada",
     };
     setOrders((prev) => [order, ...prev]);

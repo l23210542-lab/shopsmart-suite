@@ -43,6 +43,11 @@ function Orders() {
               <div>
                 <div className="text-muted-foreground">Total</div>
                 <div className="font-semibold">$ {o.total.toFixed(2)}</div>
+                {typeof o.subtotal === "number" && typeof o.shipping === "number" && (
+                  <div className="mt-1 text-[11px] text-muted-foreground">
+                    Subtotal $ {o.subtotal.toFixed(2)} · Envío {o.shipping === 0 ? "gratis" : `$ ${o.shipping.toFixed(2)}`}
+                  </div>
+                )}
               </div>
               <div>
                 <div className="text-muted-foreground">Enviar a</div>

@@ -1,4 +1,4 @@
-﻿import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -135,7 +135,7 @@ function RootComponent() {
             <main className="flex-1">
               <Outlet />
             </main>
-            <Footer />
+            <Footer catalogSource={catalog.source} />
           </div>
           <Toaster richColors position="top-right" />
         </CartProvider>
