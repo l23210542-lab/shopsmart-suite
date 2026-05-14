@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+﻿import { Link, useNavigate } from "@tanstack/react-router";
 import {
   Search,
   ShoppingCart,
@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
-import { categories } from "@/lib/catalog";
+import { useAppCatalog } from "@/lib/use-app-catalog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,6 +82,7 @@ function MobileNavAccount({ onClose }: { onClose: () => void }) {
 }
 
 export function Header() {
+  const { categories } = useAppCatalog();
   const { count } = useCart();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -193,7 +194,9 @@ export function Header() {
               {categories.map((c) => (
                 <DropdownMenuItem
                   key={c.slug}
-                  onClick={() => navigate({ to: "/products", search: { cat: c.slug, q: undefined } as any })}
+                  onClick={() =>
+                    navigate({ to: "/products", search: { cat: c.slug, q: undefined } as any })
+                  }
                 >
                   {c.name}
                 </DropdownMenuItem>
@@ -218,7 +221,9 @@ export function Header() {
         {/* Account */}
         <DropdownMenu>
           <DropdownMenuTrigger className="hidden rounded-md border border-transparent px-2 py-1.5 text-left text-xs hover:border-white/40 md:block">
-            <div className="text-[10px] text-nav-foreground/70">Hola, {user?.name ?? "Inicia sesión"}</div>
+            <div className="text-[10px] text-nav-foreground/70">
+              Hola, {user?.name ?? "Inicia sesión"}
+            </div>
             <div className="flex items-center gap-1 font-semibold">
               <User className="size-3.5" /> Cuenta y listas
             </div>
@@ -230,20 +235,30 @@ export function Header() {
                   {user.email} · {user.role}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate({ to: "/orders" })}>Mis órdenes</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate({ to: "/orders" })}>
+                  Mis órdenes
+                </DropdownMenuItem>
                 {user.role !== "customer" && (
-                  <DropdownMenuItem onClick={() => navigate({ to: "/seller" })}>Panel vendedor</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate({ to: "/seller" })}>
+                    Panel vendedor
+                  </DropdownMenuItem>
                 )}
                 {user.role === "admin" && (
-                  <DropdownMenuItem onClick={() => navigate({ to: "/admin" })}>Panel admin</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate({ to: "/admin" })}>
+                    Panel admin
+                  </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>Cerrar sesión</DropdownMenuItem>
               </>
             ) : (
               <>
-                <DropdownMenuItem onClick={() => navigate({ to: "/login" })}>Iniciar sesión</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate({ to: "/register" })}>Crear cuenta</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate({ to: "/login" })}>
+                  Iniciar sesión
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate({ to: "/register" })}>
+                  Crear cuenta
+                </DropdownMenuItem>
               </>
             )}
           </DropdownMenuContent>

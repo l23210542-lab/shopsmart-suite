@@ -2,9 +2,17 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { ProductCard } from "./ProductCard";
-import type { Product } from "@/lib/catalog";
+import type { Product } from "@/lib/catalog-types";
 
-export function CategoryRow({ title, slug, items }: { title: string; slug: string; items: Product[] }) {
+export function CategoryRow({
+  title,
+  slug,
+  items,
+}: {
+  title: string;
+  slug: string;
+  items: Product[];
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const scroll = (dir: 1 | -1) => {
     const el = ref.current;
