@@ -161,7 +161,7 @@ function Detail() {
       {related.length > 0 && (
         <section className="mt-10">
           <h2 className="mb-3 text-2xl font-bold">Productos relacionados</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="grid gap-3 grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
             {related.map((p) => (
               <ProductCard key={p.id} product={p} compact />
             ))}

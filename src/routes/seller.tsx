@@ -80,7 +80,7 @@ function Seller() {
                 <tr key={p.id} className="hover:bg-accent/40">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <img src={p.image} alt={p.name} className="size-10 rounded object-cover" />
+                      <img src={p.image} alt={p.name} className="size-10 rounded object-cover hidden md:block" />
                       <Link
                         to="/product/$id"
                         params={{ id: p.id }}
@@ -93,7 +93,7 @@ function Seller() {
                   <td className="px-4 py-3">
                     {categories.find((c) => c.slug === p.category)?.name}
                   </td>
-                  <td className="px-4 py-3 font-semibold">$ {p.price.toFixed(2)}</td>
+                  <td className="px-4 py-3 font-semibold">${p.price.toFixed(2)}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs ${p.stock < 5 ? "bg-destructive/15 text-destructive" : "bg-success/15 text-success"}`}

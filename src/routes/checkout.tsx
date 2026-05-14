@@ -85,7 +85,7 @@ function Checkout() {
                       <div className="text-xs text-muted-foreground">Cant. {i.quantity}</div>
                     </div>
                     <div className="text-sm font-semibold">
-                      $ {(p.price * i.quantity).toFixed(2)}
+                      ${(p.price * i.quantity).toFixed(2)}
                     </div>
                   </li>
                 );
@@ -96,10 +96,10 @@ function Checkout() {
 
         <aside className="h-fit rounded-xl border bg-card p-5 shadow-card md:sticky md:top-32">
           <h3 className="mb-3 text-lg font-bold">Resumen</h3>
-          <Row label="Subtotal" value={`$ ${subtotal.toFixed(2)}`} />
-          <Row label="Envio" value={shipping === 0 ? "GRATIS" : `$ ${shipping.toFixed(2)}`} />
+          <Row label="Subtotal" value={`$${subtotal.toFixed(2)}`} />
+          <Row label="Envio" value={shipping === 0 ? "GRATIS" : `$${shipping.toFixed(2)}`} />
           <div className="my-3 border-t" />
-          <Row label="Total" value={`$ ${total.toFixed(2)}`} bold />
+          <Row label="Total" value={`$${total.toFixed(2)}`} bold />
           <Button
             type="submit"
             className="mt-4 w-full rounded-full bg-primary text-primary-foreground hover:brightness-95"
