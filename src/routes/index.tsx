@@ -1,7 +1,9 @@
 ﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAppCatalog } from "@/lib/use-app-catalog";
 import { CategoryRow } from "@/components/CategoryRow";
+import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
 import { ArrowRight, Truck, ShieldCheck, Cpu } from "lucide-react";
+import logoUrl from "@/imgs/logo.png";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -10,7 +12,7 @@ function Index() {
   return (
     <div className="mx-auto max-w-[1400px] px-3 sm:px-4">
       {/* Hero */}
-      <section className="relative mt-3 overflow-hidden rounded-2xl bg-hero-gradient px-6 py-14 text-nav-foreground sm:px-12 sm:py-20">
+      <section className="relative mt-3 overflow-hidden rounded-2xl bg-hero-gradient pb-10 pt-4 text-nav-foreground sm:pb-14 sm:pt-6">
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -19,7 +21,10 @@ function Index() {
             backgroundSize: "40px 40px, 60px 60px",
           }}
         />
-        <div className="relative max-w-2xl z-30">
+        <div className="relative z-10 px-3 sm:px-4">
+          <HeroBannerCarousel />
+        </div>
+        <div className="relative z-30 max-w-2xl px-6 pt-8 sm:px-12 sm:pt-10">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold text-primary backdrop-blur">
             <Cpu className="size-3.5" /> Corre 100% sobre Raspberry Pi 4
           </div>
@@ -44,11 +49,13 @@ function Index() {
             >
               Vender en Cenít Pi
             </Link>
-            
           </div>
-          
         </div>
-        <img src="src\imgs\logo.png" className="z-0 w-xs sm:w-sm md:w-md absolute -bottom-30 -right-20 opacity-30 fadein-anim"></img>
+        <img
+          src={logoUrl}
+          alt=""
+          className="fadein-anim pointer-events-none absolute -bottom-30 -right-20 z-0 w-xs opacity-30 sm:w-sm md:w-md"
+        />
       </section>
 
       {/* Quick categories */}
