@@ -1,6 +1,7 @@
 ﻿import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import JsBarcode from "jsbarcode";
+import { BitcoinPaymentDemo, type BtcDemoProof } from "@/components/BitcoinPaymentDemo";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { useAppCatalog } from "@/lib/use-app-catalog";
@@ -17,6 +18,7 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  Coins,
   CreditCard,
   MapPin,
   Package,
@@ -34,7 +36,7 @@ type Step = 1 | 2 | 3;
 /** URL oficial de PayPal (inicio de sesión / flujo de pago). Sustituye por la URL de tu comercio cuando integres la API. */
 const PAYPAL_WEB_URL = "https://www.paypal.com/signin";
 
-type PaymentMethod = "card" | "paypal" | "cash";
+type PaymentMethod = "card" | "paypal" | "cash" | "bitcoin";
 
 /** Umbral (subtotal) para envío estándar gratis. */
 const FREE_SHIPPING_THRESHOLD = 100;
@@ -103,6 +105,8 @@ function Checkout() {
   const [shippingTier, setShippingTier] = useState<ShippingTier>("standard");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
   const [cashReference, setCashReference] = useState<string | null>(null);
+  const [btcDialogOpen, setBtcDialogOpen] = useState(false);
+  const [btcProof, setBtcProof] = useState<BtcDemoProof | null>(null);
 
   const [cardNumber, setCardNumber] = useState("4242424242424242");
   const [cardExpiry, setCardExpiry] = useState("12/28");
@@ -122,6 +126,13 @@ function Checkout() {
   useEffect(() => {
     if (user?.name && !fullName) setFullName(user.name);
   }, [user?.name, fullName]);
+
+  useEffect(() => {
+    if (paymentMethod !== "bitcoin") {
+      setBtcProof(null);
+      setBtcDialogOpen(false);
+    }
+  }, [paymentMethod]);
 
   const shipping = useMemo(() => shippingAmountForTier(subtotal, shippingTier), [subtotal, shippingTier]);
   const standardShippingPreview = useMemo(() => shippingAmountForTier(subtotal, "standard"), [subtotal]);
@@ -181,6 +192,10 @@ function Checkout() {
         return false;
       }
     }
+    if (paymentMethod === "bitcoin" && !btcProof) {
+      toast.error("Completa el simulador de pago con Bitcoin (demo) antes de continuar.");
+      return false;
+    }
     return true;
   };
 
@@ -197,6 +212,10 @@ function Checkout() {
       shippingTier === "plus"
         ? `Envío: Plus (prioridad, entrega acelerada) — ${shipping === 0 ? "Gratis" : `$${shipping.toFixed(2)}`}`
         : `Envío: Estándar — ${shipping === 0 ? "Gratis" : `$${shipping.toFixed(2)}`}`;
+    const btcLine =
+      paymentMethod === "bitcoin" && btcProof
+        ? `\nPago: Bitcoin (demo) · ${btcProof.amountBtc} BTC · TX ${btcProof.txId.slice(0, 18)}…`
+        : "";
     const address = `${formatShippingBlock({
       fullName,
       phone,
@@ -206,8 +225,8 @@ function Checkout() {
       city,
       reference,
       postal,
-    })}\n${shippingLine}`;
-    const order = placeOrder({ address, subtotal, shipping });
+    })}\n${shippingLine}${btcLine}`;
+    const order = placeOrder({ address, subtotal, shipping, shippingTier });
     toast.success(`Pedido ${order.id} confirmado`);
     nav({ to: "/orders" });
   };
@@ -223,7 +242,8 @@ function Checkout() {
       </div>
       <h1 className="mb-2 text-3xl font-bold">Checkout</h1>
       <p className="mb-8 max-w-2xl text-sm text-muted-foreground">
-        Completa los pasos: revisa tu pedido, elige envío Estándar o Plus, método de pago y confirma. Los cobros reales requieren integración con pasarelas.
+        Completa los pasos: revisa tu pedido, elige envío Estándar o Plus, método de pago (incluye Bitcoin en modo demo) y confirma. Ningún cobro real se
+        procesa en esta versión.
       </p>
 
       <StepIndicator current={step} onSelect={(s) => s < step && goStep(s)} />
@@ -417,13 +437,13 @@ function Checkout() {
 
               <SectionCard
                 title="Método de pago"
-                description="Elige cómo quieres pagar. Tarjeta y efectivo son simulación en esta demo; PayPal abre el sitio oficial para que completes el pago con tu cuenta."
+                description="Tarjeta y efectivo son simulación; PayPal abre su web; Bitcoin abre un flujo guiado de demo (sin red real ni cobro)."
                 icon={<CreditCard className="size-5" />}
               >
                 <RadioGroup
                   value={paymentMethod}
                   onValueChange={(v) => setPaymentMethod(v as PaymentMethod)}
-                  className="grid gap-3 sm:grid-cols-3"
+                  className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"
                 >
                   <label
                     htmlFor="pay-card"
@@ -466,6 +486,20 @@ function Checkout() {
                       <span className="text-sm font-semibold">Efectivo</span>
                     </div>
                     <span className="pl-6 text-xs text-muted-foreground">Tiendas de conveniencia</span>
+                  </label>
+                  <label
+                    htmlFor="pay-bitcoin"
+                    className={cn(
+                      "flex cursor-pointer flex-col gap-2 rounded-lg border p-4 transition-colors",
+                      paymentMethod === "bitcoin" ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "hover:bg-muted/40",
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="bitcoin" id="pay-bitcoin" />
+                      <Coins className="size-4 text-amber-600 dark:text-amber-400" />
+                      <span className="text-sm font-semibold">Bitcoin</span>
+                    </div>
+                    <span className="pl-6 text-xs text-muted-foreground">Demo con flujo completo</span>
                   </label>
                 </RadioGroup>
 
@@ -513,6 +547,41 @@ function Checkout() {
                     >
                       Abrir PayPal ahora
                     </Button>
+                  </div>
+                )}
+
+                {paymentMethod === "bitcoin" && (
+                  <div className="mt-6 space-y-4 border-t pt-6">
+                    <p className="text-sm text-muted-foreground">
+                      Simulamos factura, código QR, detección en mempool y <strong className="text-foreground">3 confirmaciones</strong>. Es teatro
+                      educativo: <strong className="text-foreground">cero satoshis</strong> se mueven de verdad.
+                    </p>
+                    {btcProof ? (
+                      <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-4 text-sm">
+                        <p className="font-semibold text-foreground">Demo completada</p>
+                        <p className="mt-1 font-mono text-xs text-muted-foreground">
+                          {btcProof.amountBtc} BTC · TX {btcProof.txId.slice(0, 24)}…
+                        </p>
+                        <Button type="button" variant="outline" size="sm" className="mt-3 rounded-full" onClick={() => setBtcDialogOpen(true)}>
+                          Volver a ejecutar simulación
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        type="button"
+                        className="rounded-full bg-amber-600 text-white hover:bg-amber-700"
+                        onClick={() => setBtcDialogOpen(true)}
+                      >
+                        <Coins className="mr-2 size-4" />
+                        Abrir simulador de pago Bitcoin
+                      </Button>
+                    )}
+                    <BitcoinPaymentDemo
+                      open={btcDialogOpen}
+                      onOpenChange={setBtcDialogOpen}
+                      totalUsd={total}
+                      onComplete={setBtcProof}
+                    />
                   </div>
                 )}
 
@@ -613,6 +682,15 @@ function Checkout() {
                       <div className="max-w-sm">
                         <PaymentBarcode value={cashReference} />
                       </div>
+                    </div>
+                  )}
+                  {paymentMethod === "bitcoin" && btcProof && (
+                    <div className="space-y-2 text-muted-foreground">
+                      <p>
+                        <strong className="text-foreground">Bitcoin (demo)</strong> — {btcProof.amountBtc} BTC confirmados en simulación.
+                      </p>
+                      <p className="break-all font-mono text-[11px]">TX: {btcProof.txId}</p>
+                      <p className="text-xs">Factura demo: {btcProof.invoiceId}</p>
                     </div>
                   )}
                 </div>

@@ -1,7 +1,8 @@
 ﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart";
 import { useAppCatalog } from "@/lib/use-app-catalog";
-import { Package, CheckCircle2 } from "lucide-react";
+import { getDeliveryEstimate } from "@/lib/delivery-estimate";
+import { Package, CheckCircle2, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/orders")({ component: Orders });
@@ -29,7 +30,9 @@ function Orders() {
     <div className="mx-auto max-w-[1100px] px-3 py-6 sm:px-4">
       <h1 className="mb-6 text-3xl font-bold">Mis órdenes</h1>
       <div className="space-y-4">
-        {orders.map((o) => (
+        {orders.map((o) => {
+          const delivery = getDeliveryEstimate(o);
+          return (
           <div key={o.id} className="overflow-hidden rounded-xl border bg-card shadow-card">
             <div className="flex flex-wrap items-center gap-6 border-b bg-muted px-5 py-3 text-xs">
               <div>
@@ -49,12 +52,27 @@ function Orders() {
                   </div>
                 )}
               </div>
-              <div>
+              <div className="min-w-[200px] max-w-md flex-1">
                 <div className="text-muted-foreground">Enviar a</div>
-                <div className="font-semibold">{o.address}</div>
+                <div className="line-clamp-3 font-semibold whitespace-pre-wrap">{o.address}</div>
               </div>
               <div className="ml-auto flex items-center gap-1 rounded-full bg-success/15 px-3 py-1 font-semibold text-success">
                 <CheckCircle2 className="size-3.5" /> {o.status.toUpperCase()}
+              </div>
+            </div>
+            <div className="flex flex-wrap items-start gap-3 border-b border-dashed bg-primary/5 px-5 py-3 text-sm">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                <Truck className="size-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold text-foreground">Entrega estimada</div>
+                <p className="mt-0.5 text-muted-foreground">
+                  Llegada prevista <span className="font-medium text-foreground">{delivery.rangeLabel}</span>
+                  <span className="text-xs"> · {delivery.leadTimeLabel}</span>
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Tipo: {delivery.tierLabel}. Fechas orientativas en días hábiles (no festivos); el transportista puede confirmar el día exacto.
+                </p>
               </div>
             </div>
             <div className="divide-y p-5">
@@ -82,7 +100,8 @@ function Orders() {
               })}
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

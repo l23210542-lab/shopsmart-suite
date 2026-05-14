@@ -15,12 +15,15 @@ export type Order = {
   shipping?: number;
   /** Total pagado (subtotal + envío cuando existen ambos). */
   total: number;
+  /** Tipo de envío elegido en checkout; pedidos antiguos se infieren del texto en `address`. */
+  shippingTier?: "standard" | "plus";
 };
 
 export type PlaceOrderPayload = {
   address: string;
   subtotal: number;
   shipping: number;
+  shippingTier?: "standard" | "plus";
 };
 
 type Ctx = {
@@ -113,6 +116,7 @@ export function CartProvider({
       shipping: payload.shipping,
       address: payload.address,
       status: "pagada",
+      shippingTier: payload.shippingTier,
     };
     setOrders((prev) => [order, ...prev]);
     setItems([]);

@@ -2,7 +2,7 @@
 import { useAppCatalog } from "@/lib/use-app-catalog";
 import { CategoryRow } from "@/components/CategoryRow";
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
-import { ArrowRight, Truck, ShieldCheck, Cpu } from "lucide-react";
+import { ArrowRight, Truck, ShieldCheck, Cpu, Coins, Leaf, UsersRound, Scale, Shield, Sprout } from "lucide-react";
 import logoUrl from "@/imgs/logo.png";
 
 export const Route = createFileRoute("/")({ component: Index });
@@ -104,6 +104,47 @@ function Index() {
         />
       </section>
 
+      {/* Diferenciadores (propuesta de valor vs. marketplaces genéricos) */}
+      <section className="mt-10">
+        <h2 className="mb-2 text-2xl font-bold">Lo que no copian Amazon ni Mercado Libre</h2>
+        <p className="mb-6 max-w-3xl text-sm text-muted-foreground">
+          Funciones pensadas para transparencia, comunidad y soberanía técnica. Parte es demo o roadmap; la idea es mostrar hacia dónde puede crecer tu
+          marketplace.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <InnovationCard
+            icon={<Coins className="size-5 text-amber-500" />}
+            title="Checkout con Bitcoin (demo)"
+            desc="Flujo completo simulado: factura, QR, mempool y confirmaciones. Sin custodia bancaria tradicional; en producción enlazarías BTCPay, OpenNode o Lightning."
+          />
+          <InnovationCard
+            icon={<Shield className="size-5 text-rose-500" />}
+            title="Escrow social transparente"
+            desc="Fondos retenidos hasta que confirmes la entrega; historial de disputas visible para la comunidad (modelo de confianza, no caja negra)."
+          />
+          <InnovationCard
+            icon={<UsersRound className="size-5 text-sky-500" />}
+            title="Compra colectiva por código postal"
+            desc="Agrupa pedidos con vecinos del mismo CP: menos envíos sueltos, menos emisiones y precio de envío compartido (próximamente en ruta)."
+          />
+          <InnovationCard
+            icon={<Leaf className="size-5 text-emerald-600" />}
+            title="Huella CO₂ por pedido"
+            desc="Cada checkout estima kg CO₂ del envío; con envío Plus puedes compensar o priorizar rutas bajas en carbono (datos demo educativos)."
+          />
+          <InnovationCard
+            icon={<Sprout className="size-5 text-lime-600" />}
+            title="Ruta del productor"
+            desc="En supermercado muestra un % orientativo que vuelve al productor o cooperativa; trazabilidad simple que los gigantes raramente exponen."
+          />
+          <InnovationCard
+            icon={<Scale className="size-5 text-violet-500" />}
+            title="Motor en tu Raspberry Pi"
+            desc="Catálogo y pedidos pueden vivir en tu propio hardware: comisiones y reglas las defines tú, sin depender solo del cloud del marketplace."
+          />
+        </div>
+      </section>
+
       {/* Category rows */}
       {categories.map((c) => (
         <CategoryRow key={c.slug} title={c.name} slug={c.slug} items={productsByCategory(c.slug)} />
@@ -111,6 +152,16 @@ function Index() {
 
       <div className="h-8" />
       <CategoryRow title="Productos destacados" slug="" items={products.slice(0, 12)} />
+    </div>
+  );
+}
+
+function InnovationCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
+  return (
+    <div className="rounded-xl border bg-card p-5 shadow-card transition hover:shadow-pop">
+      <div className="mb-3 flex size-10 items-center justify-center rounded-lg bg-muted">{icon}</div>
+      <h3 className="text-base font-bold leading-snug">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{desc}</p>
     </div>
   );
 }
